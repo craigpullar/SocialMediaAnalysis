@@ -9,25 +9,23 @@ public class Frame extends JFrame{
 	//---------------\\
 	//--[[DECLARE]]--\\
 	//---------------\\
-	private int width;
-	private int height;
+	private Dimension screenSize;
 	private JPanel panel;
 	
 	//--------------------\\
 	//--[[CONSTRUCTORS]]--\\
 	//--------------------\\
-	public Frame(int width, int height) {
-		this.width = width;
-		this.height = height;
+	public Frame(Dimension screenSize) {
+		this.screenSize = screenSize;
 		this.panel = new JPanel();
 		
 		this.setContentPane(this.panel);
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(this.width, this.height));
-		this.setMinimumSize(new Dimension(this.width,this.height));
-		this.setMaximumSize(new Dimension(this.width,this.height));
+		this.setPreferredSize(this.screenSize);
+		this.setMinimumSize(this.screenSize);
+		this.setMaximumSize(this.screenSize);
 		this.setResizable(false);
-		this.setLocation(20,20);
+		this.setLocation(0,0);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setTitle("Social Media Anaylsis");
 		
@@ -43,20 +41,12 @@ public class Frame extends JFrame{
 	//--[[GETTER & SETTER]]--\\
 	//-----------------------\\
 	
-	public int getWidth() {
-		return width;
+	public Dimension getScreenSize() {
+		return screenSize;
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
+	public void setScreenSize(Dimension screenSize) {
+		this.screenSize = screenSize;
 	}
 
 	public JPanel getPanel() {
