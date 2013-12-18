@@ -13,17 +13,39 @@ public class createDB {
 	
 	//--[[Twitter Tables]]--\\
 	public void twitterTweet() throws SQLException{
-		String SQL = "";
+		String SQL = "CREATE TABLE Twitter_Tweet (" +
+				"ID int NOT NULL AUTO_INCREMENT," +
+				"UserID int NOT NULL FOREIGN KEY," +
+				"Content varchar(160) NOT NULL," +
+				"Date DATE NOT NULL," +
+				"Time int NOT NULL," +
+				"Location text," +
+				"PRIMARY KEY (ID)" +
+				");";
 		this.db.executeSQL(SQL);
 	}
 	
 	public void twitterUser() throws SQLException{
-		String SQL = "";
+		String SQL = "CREATE TABLE Twitter_User (" +
+				"ID int NOT NULL AUTO_INCREMENT," +
+				"NoTweets int NOT NULL," +
+				"NoFollowing int NOT NULL," +
+				"NoFollowers int NOT NULL," +
+				"Location text," +
+				"DOB date NOT NULL," +
+				"JoinDate date NOT NULL," +
+				"PRIMARY KEY (ID)" +
+				");";
 		this.db.executeSQL(SQL);
 	}
 	
 	public void twitterHashTag() throws SQLException{
-		String SQL = "";
+		String SQL = "CREATE TABLE Twitter_HashTag (" +
+				"ID int NOT NULL AUTO_INCREMENT," +
+				"TweetID int NOT NULL FOREIGN KEY," +
+				"Content varchar(160) NOT NULL," +
+				"PRIMARY KEY (ID)" +
+				");";
 		this.db.executeSQL(SQL);
 	}
 	
