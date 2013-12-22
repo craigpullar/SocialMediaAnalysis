@@ -51,17 +51,38 @@ public class createDB {
 	
 	//--[[Flickr Tables]]--\\
 	public void FlickrImage() throws SQLException{
-		String SQL = "";
+		String SQL = "CREATE TABLE Flickr_Image (" +
+				"ID int NOT NULL AUTO_INCREMENT," +
+				"UserID int NOT NULL FOREIGN KEY," +
+				"Title text NOT NULL," +
+				"DateTaken Date NOT NULL," +
+				"Views int NOT NULL," +
+				"PRIMARY KEY (ID)"+
+				");";
 		this.db.executeSQL(SQL);
 	}
 	
 	public void FlickrUser() throws SQLException{
-		String SQL = "";
+		String SQL = "CREATE TABLE Flickr_User (" +
+				"ID int NOT NULL AUTO_INCREMENT," +
+				"NoImages int NOT NULL,"+
+				"NoFollowing int NOT NULL," +
+				"NoFollowers int not null," +
+				"Location text," +
+				"DOB date," +
+				"JoinDate date," +
+				"PRIMARY KEY (ID)" +
+				");";
 		this.db.executeSQL(SQL);
 	}
 	
 	public void FlickrTag() throws SQLException{
-		String SQL = "";
+		String SQL = "CREATE TABLE Flickr_Tag (" +
+				"ID int NOT NULL AUTO_INCREMENT," +
+				"ImageID int NOT NULL FOREIGN KEY," +
+				"Content text not null," +
+				"PRIMARY KEY (ID)" +
+				");";
 		this.db.executeSQL(SQL);
 	}
 	
