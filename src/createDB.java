@@ -6,31 +6,40 @@ public class createDB {
 	//--[[Declare]]--\\
 	private Database db;
 	
-	//--[[Main]]--\\
-	public static void main(String[] args){
-		
+	public createDB(Database db){
+		this.db = db;
 	}
 	
+	public void create() throws SQLException{
+		this.twitterTweet();
+		this.twitterUser();
+		this.tweetLocation();
+		this.twitterPersona();
+		this.twitterHashTag();
+		this.Analysis();
+	
+	}
 	//--[[Twitter Tables]]--\\
 	public void twitterTweet() throws SQLException{
 		String SQL = "CREATE TABLE Twitter_Tweet (" +
-				"ID int NOT NULL AUTO_INCREMENT," +
-				"UserID int NOT NULL FOREIGN KEY," +
+				"ID INTEGER NOT NULL," +
+				"UserID INT NOT NULL," +
 				"Content varchar(160) NOT NULL," +
 				"Date DATE NOT NULL," +
-				"Time int NOT NULL," +
+				"Time INT NOT NULL," +
 				"Location text," +
 				"PRIMARY KEY (ID)" +
+				"FOREIGN KEY(UserID) References Twitter_User(ID)" +
 				");";
 		this.db.executeSQL(SQL);
 	}
 	
 	public void twitterUser() throws SQLException{
 		String SQL = "CREATE TABLE Twitter_User (" +
-				"ID int NOT NULL AUTO_INCREMENT," +
-				"NoTweets int NOT NULL," +
-				"NoFollowing int NOT NULL," +
-				"NoFollowers int NOT NULL," +
+				"ID INT NOT NULL," +
+				"NoTweets INT NOT NULL," +
+				"NoFollowing INT NOT NULL," +
+				"NoFollowers INT NOT NULL," +
 				"Location text," +
 				"DOB date NOT NULL," +
 				"JoinDate date NOT NULL," +
@@ -41,86 +50,68 @@ public class createDB {
 	
 	public void twitterHashTag() throws SQLException{
 		String SQL = "CREATE TABLE Twitter_HashTag (" +
-				"ID int NOT NULL AUTO_INCREMENT," +
-				"TweetID int NOT NULL FOREIGN KEY," +
+				"ID INT NOT NULL," +
+				"TweetID INT NOT NULL," +
 				"Content varchar(160) NOT NULL," +
 				"PRIMARY KEY (ID)" +
-				");";
-		this.db.executeSQL(SQL);
-	}
-	
-	//--[[Flickr Tables]]--\\
-	public void FlickrImage() throws SQLException{
-		String SQL = "CREATE TABLE Flickr_Image (" +
-				"ID int NOT NULL AUTO_INCREMENT," +
-				"UserID int NOT NULL FOREIGN KEY," +
-				"Title text NOT NULL," +
-				"DateTaken Date NOT NULL," +
-				"Views int NOT NULL," +
-				"PRIMARY KEY (ID)"+
-				");";
-		this.db.executeSQL(SQL);
-	}
-	
-	public void FlickrUser() throws SQLException{
-		String SQL = "CREATE TABLE Flickr_User (" +
-				"ID int NOT NULL AUTO_INCREMENT," +
-				"NoImages int NOT NULL,"+
-				"NoFollowing int NOT NULL," +
-				"NoFollowers int not null," +
-				"Location text," +
-				"DOB date," +
-				"JoinDate date," +
-				"PRIMARY KEY (ID)" +
-				");";
-		this.db.executeSQL(SQL);
-	}
-	
-	public void FlickrTag() throws SQLException{
-		String SQL = "CREATE TABLE Flickr_Tag (" +
-				"ID int NOT NULL AUTO_INCREMENT," +
-				"ImageID int NOT NULL FOREIGN KEY," +
-				"Content text not null," +
-				"PRIMARY KEY (ID)" +
+				"FOREIGN KEY (TweetID) references Twitter_Tweet(ID)" +
 				");";
 		this.db.executeSQL(SQL);
 	}
 	
 	//--[[Analysis Table]]--\\
 	public void Analysis() throws SQLException{
-		String SQL = "";
+		String SQL = "CREATE TABLE Anaylsis(" +
+					"ID INT NOT NULL," +
+					"SearchTerm text not null," +
+					"PRIMARY KEY (ID)" +
+					");";
 		this.db.executeSQL(SQL);
 	}
 	
 	//--[[Twitter Analysis Tables]]--\\
-	public void twitterLocation() throws SQLException{
-		String SQL = "";
+	public void twitterSentiment() throws SQLException{
+		String SQL = "CREATE TABLE Twitter_Tweet_Sentiment_Analysis(" +
+				"ID INT NOT NULL," +
+				"TweetID INT NOT NULL FOREIGN KEY," +
+				"Sentiment INT NOT NULL," +
+				"AnalysisID INT NOT NULL FOREIGN KEY," +
+				"FOREIGN KEY TweetID references Twitter_Tweer(ID)," +
+				"FOREIGN KEY (AnalysisID) references Analysis(ID)," +
+				"PRIMARY KEY (ID)" +
+				");";
 		this.db.executeSQL(SQL);
 	}
 	
 	public void twitterPersona() throws SQLException{
-		String SQL = "";
+		String SQL = "CREATE TABLE Twitter_Persona(" +
+				"ID INT NOT NULL," +
+				"NoTweets INT NOT NULL," +
+				"NoFollowing INT NOT NULL," +
+				"NoFollowers INT NOT NULL," +
+				"Location INT NOT NULL," +
+				"DOB date NOT NULL," +
+				"JoinDate date NOT NULL," +
+				"AnalysisID INT NOT NULL," +
+				"FOREIGN KEY (AnalysisID) references Analysis(ID),"+
+				"PRIMARY KEY (ID)" +
+				");";
 		this.db.executeSQL(SQL);
 	}
 	
-	public void tweetSentiment() throws SQLException{
-		String SQL = "";
-		this.db.executeSQL(SQL);
-	}
-	
-	//--[[Flickr Analysis Tables]]--\\
-	public void flickrLocation() throws SQLException{
-		String SQL = "";
-		this.db.executeSQL(SQL);
-	}
-	
-	public void flickrPersona() throws SQLException{
-		String SQL = "";
-		this.db.executeSQL(SQL);
-	}
-	
-	public void imageSentiment() throws SQLException{
-		String SQL = "";
+	public void tweetLocation() throws SQLException{
+		String SQL = "CREATE TABLE Twitter_Location_Analysis(" +
+				"ID INT NOT NULL," +
+				"Location Text NOT NULL," +
+				"NoTweets INT NOT NULL," +
+				"NoUsers INT NOT NULL," +
+				"NoReplies INT," +
+				"NoFavourites INT," +
+				"NoHashTags INT NOT NULL," +
+				"AnalysisID INT NOT NULL," +
+				"FOREIGN KEY (AnalysisID) references Analysis(ID),"+
+				"PRIMARY KEY (ID)" +
+				");";
 		this.db.executeSQL(SQL);
 	}
 }
