@@ -71,7 +71,7 @@ public class Database {
 				"Content varchar(160) NOT NULL," +
 				"Date DATE NOT NULL," +
 				"Time INT NOT NULL," +
-				"Location text," +
+				"Location INT," +
 				"PRIMARY KEY (ID)" +
 				"FOREIGN KEY(UserID) References Twitter_User(ID)" +
 				");";
@@ -84,7 +84,7 @@ public class Database {
 				"NoTweets INT NOT NULL," +
 				"NoFollowing INT NOT NULL," +
 				"NoFollowers INT NOT NULL," +
-				"Location text," +
+				"Location INT," +
 				"DOB date NOT NULL," +
 				"JoinDate date NOT NULL," +
 				"PRIMARY KEY (ID)" +

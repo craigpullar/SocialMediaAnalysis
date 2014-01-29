@@ -12,13 +12,13 @@ public class Tweet {
 	private String content;
 	private Date date;
 	private int time;
-	private String location;
+	private int location;
 	
 	//--------------------\\
 	//--[[CONSTRUCTORS]]--\\
 	//--------------------\\
 	
-	public Tweet(int ID,int userID, String content,Date date,int time,String location){
+	public Tweet(int ID,int userID, String content,Date date,int time,int location){
 		this.setID(ID);
 		this.setUserID(userID);
 		this.setContent(content);
@@ -69,11 +69,11 @@ public class Tweet {
 		this.time = time;
 	}
 
-	public String getLocation() {
+	public int getLocation() {
 		return location;
 	}
 
-	public void setLocation(String location) {
+	public void setLocation(int location) {
 		this.location = location;
 	}
 	
