@@ -8,8 +8,6 @@ public class Application {
 		@SuppressWarnings("unused")
 		Frame frame = new Frame(screenSize);
 		Database db = new Database();
-		createDB createDB = new createDB(db);
-		createDB.create();
 		
 	}
 }
