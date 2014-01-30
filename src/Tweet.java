@@ -1,5 +1,13 @@
 import java.util.Date;
 
+import twitter4j.Paging;
+import twitter4j.ResponseList;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.auth.AccessToken;
+
 
 public class Tweet {
 
@@ -18,6 +26,9 @@ public class Tweet {
 	//--[[CONSTRUCTORS]]--\\
 	//--------------------\\
 	
+	public Tweet(){
+		
+	}
 	public Tweet(int ID,int userID, String content,Date date,int time,int location){
 		this.setID(ID);
 		this.setUserID(userID);
@@ -26,7 +37,10 @@ public class Tweet {
 		this.setTime(time);
 		this.setLocation(location);
 	}
-
+	
+	//-----------------\\
+	//--[[FUNCTIONS]]--\\
+	//-----------------\\
 	
 	//--[[GETTERS & SETTERS]]--\\
 	public int getID() {

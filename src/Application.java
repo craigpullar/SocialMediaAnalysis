@@ -8,6 +8,8 @@ public class Application {
 		@SuppressWarnings("unused")
 		Frame frame = new Frame(screenSize);
 		Database db = new Database();
+		Scraper scraper = new Scraper();
+		scraper.search("Justin Beiber");
 		
 	}
 }
