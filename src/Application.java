@@ -9,7 +9,11 @@ public class Application {
 		Frame frame = new Frame(screenSize);
 		Database db = new Database();
 		Scraper scraper = new Scraper();
-		scraper.search("Justin Beiber");
+		scraper.searchTweets("Justin Beiber");
+		for (int i = 0; i < scraper.getTweets().size();i++){
+			Tweet tweet = scraper.getTweets().get(i);
+			tweet.printTweet();
+		}
 		
 	}
 }

@@ -11,8 +11,8 @@ public class Persona extends User{
 	//--[[CONSTRUCTOR]]--\\
 	//-------------------\\
 	public Persona(int ID, int noTweets, int noFollowing, int noFollowers,
-			int location, Date DOB, Date joinDate,int analysisID) {
-		super(ID, noTweets, noFollowing, noFollowers, location, DOB, joinDate);
+			String location, Date DOB, Date joinDate,int analysisID) {
+		super(ID, noTweets, noFollowing, noFollowers, location, joinDate);
 		this.analysisID = analysisID;
 	}
 

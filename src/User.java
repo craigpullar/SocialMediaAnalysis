@@ -6,34 +6,32 @@ public class User {
 	//---------------\\
 	//--[[DECLARE]]--\\
 	//---------------\\
-	private int ID;
+	private long ID;
 	private int noTweets;
 	private int noFollowing;
 	private int noFollowers;
-	private int location;
-	private Date DOB;
+	private String location;
 	private Date joinDate;
 	
 	//--------------------\\
 	//--[[CONSTRUCTORS]]--\\
 	//--------------------\\
-	public User(int ID, int noTweets, int noFollowing, int noFollowers, int location, Date DOB, Date joinDate ){
-		this.ID = ID;
-		this.noTweets = noTweets;
-		this.noFollowing = noFollowing;
-		this.noFollowers = noFollowers;
-		this.location = location;
-		this.DOB = DOB;
-		this.joinDate = joinDate;
+	public User(long ID, int noTweets, int noFollowing, int noFollowers, String location, Date joinDate ){
+		this.setID(ID);
+		this.setNoTweets(noTweets);
+		this.setNoFollowing(noFollowing);
+		this.setNoFollowers(noFollowers);
+		this.setLocation(location);
+		this.setJoinDate(joinDate);
 	}
 	
 	//-------------------------\\
 	//--[[GETTERS & SETTERS]]--\\
 	//-------------------------\\
-	public int getID() {
+	public long getID() {
 		return ID;
 	}
-	public void setID(int iD) {
+	public void setID(long iD) {
 		ID = iD;
 	}
 	public int getNoTweets() {
@@ -54,17 +52,11 @@ public class User {
 	public void setNoFollowers(int noFollowers) {
 		this.noFollowers = noFollowers;
 	}
-	public int getLocation() {
+	public String getLocation() {
 		return location;
 	}
-	public void setLocation(int location) {
+	public void setLocation(String location) {
 		this.location = location;
-	}
-	public Date getDOB() {
-		return DOB;
-	}
-	public void setDOB(Date dOB) {
-		DOB = dOB;
 	}
 	public Date getJoinDate() {
 		return joinDate;

@@ -1,12 +1,6 @@
 import java.util.Date;
 
-import twitter4j.Paging;
-import twitter4j.ResponseList;
-import twitter4j.Status;
-import twitter4j.Twitter;
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.auth.AccessToken;
+import twitter4j.GeoLocation;
 
 
 public class Tweet {
@@ -15,12 +9,11 @@ public class Tweet {
 	//--[[DECLARE]]--\\
 	//---------------\\
 	
-	private int ID;
-	private int userID;
+	private long ID;
+	private long userID;
 	private String content;
 	private Date date;
-	private int time;
-	private int location;
+	private GeoLocation location;
 	
 	//--------------------\\
 	//--[[CONSTRUCTORS]]--\\
@@ -29,34 +22,47 @@ public class Tweet {
 	public Tweet(){
 		
 	}
-	public Tweet(int ID,int userID, String content,Date date,int time,int location){
+	public Tweet(long ID,long userID, String content,Date date,GeoLocation location){
 		this.setID(ID);
 		this.setUserID(userID);
 		this.setContent(content);
 		this.setDate(date);
-		this.setTime(time);
 		this.setLocation(location);
+		if (this.getLocation()== null){
+			this.setLocation(new GeoLocation(0,0));
+		}
 	}
+
 	
 	//-----------------\\
 	//--[[FUNCTIONS]]--\\
 	//-----------------\\
 	
+	public void printTweet(){
+		System.out.println("");
+		System.out.println("//------------------\\");
+		System.out.println("TweetID: " + this.getID());
+		System.out.println("UserID: " + this.getUserID());
+		System.out.println("Content: " + this.getContent());
+		System.out.println("Date: " + this.getDate().toString());
+		System.out.println("Location: " + this.getLocation().toString());
+	}
+	
 	//--[[GETTERS & SETTERS]]--\\
-	public int getID() {
+	public long getID() {
 		return ID;
 	}
 
-	public void setID(int iD) {
-		ID = iD;
+	public void setID(long iD2) {
+		ID = iD2;
 	}
 
-	public int getUserID() {
+	public long getUserID() {
 		return userID;
 	}
 
-	public void setUserID(int userID) {
-		this.userID = userID;
+	public void setUserID(long userID2) {
+		this.userID = userID2;
 	}
 
 	public String getContent() {
@@ -75,20 +81,12 @@ public class Tweet {
 		this.date = date;
 	}
 
-	public int getTime() {
-		return time;
-	}
-
-	public void setTime(int time) {
-		this.time = time;
-	}
-
-	public int getLocation() {
+	public GeoLocation getLocation() {
 		return location;
 	}
 
-	public void setLocation(int location) {
-		this.location = location;
+	public void setLocation(GeoLocation location2) {
+		this.location = location2;
 	}
 	
 }
