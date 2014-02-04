@@ -1,7 +1,12 @@
-import java.awt.Dimension;
+import java.awt.Container;
+import java.awt.GridLayout;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 
 public class Frame extends JFrame{
@@ -9,51 +14,94 @@ public class Frame extends JFrame{
 	//---------------\\
 	//--[[DECLARE]]--\\
 	//---------------\\
-	private Dimension screenSize;
-	private JPanel panel;
+	private static final int WIDTH = 400; //WIDTH variable
+	private static final int HEIGHT = 300; //HEIGHT Variable
+	private JButton twitterScrapeButton;
+	private JTextField searchInput;
 	
-	//--------------------\\
-	//--[[CONSTRUCTORS]]--\\
-	//--------------------\\
-	public Frame(Dimension screenSize) {
-		this.screenSize = screenSize;
-		this.panel = new JPanel();
+	//-------------------\\
+	//--[[CONSTRUCTOR]]--\\
+	//-------------------\\
+	public Frame() 
+		{
+			setTitle("Scrapper");//Sets the title of the frame
+			Container pane = getContentPane();
+			pane.setLayout(new GridLayout(2, 1));
+			
+			JTabbedPane App = new JTabbedPane();
 		
-		this.setContentPane(this.panel);
-		this.setLayout(null);
-		this.setPreferredSize(this.screenSize);
-		this.setMinimumSize(this.screenSize);
-		this.setMaximumSize(this.screenSize);
-		this.setResizable(false);
-		this.setLocation(0,0);
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setTitle("Social Media Anaylsis");
+			//creates the tabbed template on the application
+			getContentPane().add(App);
+			//create tabs
+			JPanel Tab1 = new JPanel();
+			JPanel Tab2 = new JPanel();
 		
-		this.pack();
-		this.setVisible(true);
-	}
-
-	//----------------\\
-	//--[[FUNCTIONS]]--\\
-	//-----------------\\
+			//add the tabs to out Tabbed Pane and names them
+			App.addTab("Twitter", Tab1);
+			App.addTab("Flicker", Tab2);
+            
+            //creates buttons to the tabbed pages
+			this.twitterScrapeButton = new JButton("Scrape");
+            JButton test1 = new JButton("Scrape");
+            
+            //creates TextField for Searching
+            this.searchInput = new JTextField("Search");
+            JTextField newSearch1 = new JTextField("Search");
+		
+			//creates the label for the tabs
+			JLabel firstTab = new JLabel();
+			firstTab.setText("Click Scrape");
+			Tab1.add(firstTab);
+            //adds Search textfield to tab1
+            Tab1.add(searchInput);
+            //add button to tab1
+            Tab1.add(twitterScrapeButton);
+		
+			JLabel secondTab = new JLabel();
+			secondTab.setText("Click Scrape");
+			Tab2.add(secondTab);
+            //add Search Textfield to tab2
+            Tab2.add(newSearch1);
+            //add button test1 to tab2
+            Tab2.add(test1);
+            
+			//JFrame Properties
+			setSize(WIDTH, HEIGHT);//Sets the size of the frame
+			setVisible(true);//Makes the frame visible
+			setDefaultCloseOperation(EXIT_ON_CLOSE);//Closes the application when exit button is pressed
+		}
 	
-	//-----------------------\\
-	//--[[GETTER & SETTER]]--\\
-	//-----------------------\\
-	
-	public Dimension getScreenSize() {
-		return screenSize;
+	//-------------------------\\
+	//--[[GETTERS & SETTERS]]--\\
+	//-------------------------\\
+
+	public JButton getTwitterScrapeButton() {
+		return twitterScrapeButton;
 	}
 
-	public void setScreenSize(Dimension screenSize) {
-		this.screenSize = screenSize;
+
+	public void setTwitterScrapeButton(JButton twitterScrapeButton) {
+		this.twitterScrapeButton = twitterScrapeButton;
 	}
 
-	public JPanel getPanel() {
-		return panel;
+
+	public JTextField getSearchInput() {
+		return searchInput;
 	}
 
-	public void setPanel(JPanel panel) {
-		this.panel = panel;
+
+	public void setSearchInput(JTextField searchInput) {
+		this.searchInput = searchInput;
 	}
+
+
+	public int getWidth() {
+		return WIDTH;
+	}
+
+	public int getHeight() {
+		return HEIGHT;
+	}	
+		
+
 }

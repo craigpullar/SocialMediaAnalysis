@@ -47,7 +47,6 @@ public class Tweet {
 		System.out.println("Date: " + this.getDate().toString());
 		System.out.println("Location: " + this.getLocation().toString());
 	}
-	
 	//--[[GETTERS & SETTERS]]--\\
 	public long getID() {
 		return ID;
