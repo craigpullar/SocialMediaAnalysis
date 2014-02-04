@@ -51,6 +51,22 @@ public class Database {
 		statement.execute(SQL);
 	}
 	
+	//-----------------------------\\
+	//--[[SAVE OBJECT FUNCTIONS]]--\\
+	//-----------------------------\\
+	public void saveTweet(Tweet tweet) throws SQLException{
+		String SQL = "INSERT INTO Twitter_Tweet " +
+						"VALUES(" +
+						tweet.getID()+ "," +
+						tweet.getUserID() + "," +
+						"'" + tweet.getContent().replace("'", "!") + "'," +
+						"'" + tweet.getDate() + "'," +
+						tweet.getLocation().getLatitude() + "," +
+						tweet.getLocation().getLongitude() +
+						");";
+		this.executeSQL(SQL);
+	}
+	
 	//------------------------------\\
 	//--[[CREATE TABLE FUNCTIONS]]--\\
 	//------------------------------\\
@@ -70,7 +86,8 @@ public class Database {
 				"UserID INT NOT NULL," +
 				"Content varchar(160) NOT NULL," +
 				"Date DATE NOT NULL," +
-				"Location INT," +
+				"GeoLatitude INT," +
+				"GeoLongitude INT," +
 				"PRIMARY KEY (ID)" +
 				"FOREIGN KEY(UserID) References Twitter_User(ID)" +
 				");";

@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 
 import twitter4j.GeoLocation;
 import twitter4j.Query;
@@ -69,6 +70,10 @@ public class Scraper {
 	        this.tweet = new Tweet(ID,userID,content,date,location);//Create a tweet as defined by us
 	        this.tweets.add(this.tweet);//add tweet to list of tweets
 	    }
+	}
+	
+	public void clearTweets(){
+		this.tweets = new ArrayList<Tweet>();
 	}
 	
 	//------------------------\\
