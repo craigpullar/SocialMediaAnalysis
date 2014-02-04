@@ -1,8 +1,13 @@
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
+
+import twitter4j.GeoLocation;
 
 
 public class Database {
@@ -16,6 +21,7 @@ public class Database {
 	private String SQL;
 	private File file;
 	private Boolean dbExists;
+	private Statement statement;
 	
 	//-------------------\\
 	//--[[CONSTRUCTORS]]--\\
@@ -47,10 +53,31 @@ public class Database {
 	//-----------------\\
 	public void executeSQL(String SQL) throws SQLException{
 		this.setSQL(SQL);
-		Statement statement = connection.createStatement();
-		statement.execute(SQL);
+		this.statement = connection.createStatement();
+		this.statement.execute(SQL);
 	}
-	
+	//------------------------\\
+	//--[[SELECT FUNCTIONS]]--\\
+	//------------------------\\
+	public ArrayList<Tweet> selectAllTweets() throws SQLException{
+		ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+		String SQL = "SELECT * FROM Twitter_Tweet";
+		this.executeSQL(SQL);
+		ResultSet result = this.statement.getResultSet();
+		while (result.next()) {
+			int ID = result.getInt("ID");
+			int userID = result.getInt("UserID");
+			String content = result.getString("Content");
+			Date date = result.getDate("Date");
+			double lat = result.getDouble("GeoLatitude");
+			double lon = result.getDouble("GeoLongitude");
+			GeoLocation location = new GeoLocation(lat,lon);
+			Tweet tweet = new Tweet(ID,userID,content,date,location);
+			tweets.add(tweet);
+		}
+		return tweets;
+		
+	}
 	//-----------------------------\\
 	//--[[SAVE OBJECT FUNCTIONS]]--\\
 	//-----------------------------\\
