@@ -76,7 +76,17 @@ public class Database {
 			tweets.add(tweet);
 		}
 		return tweets;
-		
+	}
+	
+	public boolean tweetExists(Tweet tweet) throws SQLException{
+		String SQL = "SELECT * FROM Twitter_Tweet ";
+			SQL +=  "WHERE ID =" + tweet.getID();
+		this.executeSQL(SQL);
+		ResultSet result = this.statement.getResultSet();
+		if(result.next()){
+			return true;
+		}
+		return false;
 	}
 	//-----------------------------\\
 	//--[[SAVE OBJECT FUNCTIONS]]--\\

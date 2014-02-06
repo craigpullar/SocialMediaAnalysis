@@ -1,6 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.Timer;
 
 import twitter4j.TwitterException;
 
@@ -13,32 +14,16 @@ public class Application {
 		final
 		Frame frame = new Frame();
 		final Database db = new Database();
-		final Scraper scraper = new Scraper();
+		final Scraper scraper = new Scraper(db);
 		
 		frame.getTwitterScrapeButton().addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				String searchTerm = frame.getSearchInput().getText();
-				scraper.clearTweets();
-				try {
-					scraper.searchTweets(searchTerm);
-				} catch (TwitterException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				scraper.setSearchTerm(searchTerm);
+				scraper.start();
 				}
-				for (int i = 0; i < scraper.getTweets().size();i++){
-					Tweet tweet = scraper.getTweets().get(i);
-					try {
-						db.saveTweet(tweet);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					tweet.printTweet();
-				}
-				scraper.clearTweets();
-			}
 		});
 		
 		scraper.setTweets(db.selectAllTweets());

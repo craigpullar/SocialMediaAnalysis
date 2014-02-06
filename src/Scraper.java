@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -13,7 +14,7 @@ import twitter4j.conf.ConfigurationBuilder;
 
 
 
-public class Scraper {
+public class Scraper extends Thread{
 	
 	//---------------\\
 	//--[[DECLARE]]--\\
@@ -25,11 +26,14 @@ public class Scraper {
 	private ArrayList<User> users;
 	private User user;
 	private Tweet tweet;
+	private String searchTerm;
+	private Database db;
 	
 	//--------------------\\
 	//--[[CONSTRUCTORS]]--\\
 	//--------------------\\
-	public Scraper(){
+	public Scraper(Database db){
+		this.db = this.setDb(db);
 		this.cb = new ConfigurationBuilder();
 		this.tweets = new ArrayList<Tweet>();
 		this.users = new ArrayList<User>();
@@ -42,11 +46,28 @@ public class Scraper {
 		this.twitter = this.twitterFactory.getInstance();
 	}
 	
+	public String getSearchTerm() {
+		return searchTerm;
+	}
+
+	public void setSearchTerm(String searchTerm) {
+		this.searchTerm = searchTerm;
+	}
+
+	public Database getDb() {
+		return db;
+	}
+
+	public Database setDb(Database db) {
+		return this.db = db;
+	}
+
 	//----------------\\
 	//--[[FUNCTIONS]]--\\
 	//-----------------\\
 	public void searchTweets(String searchTerm) throws TwitterException{
 		Query query = new Query(searchTerm);//define the query
+		query.setCount(100);//Set number of tweets to return per page MAX 100
 		QueryResult result = this.twitter.search(query);//search and commit results to variable
 	    for (Status status : result.getTweets()) {//Loop through results
 	    	twitter4j.User scrapedUser = status.getUser();//Get the user from the tweet
@@ -68,12 +89,44 @@ public class Scraper {
 		    this.users.add(this.user);//add user to list of users
 
 	        this.tweet = new Tweet(ID,userID,content,date,location);//Create a tweet as defined by us
-	        this.tweets.add(this.tweet);//add tweet to list of tweets
+	        this.tweets.add(tweet);
 	    }
 	}
 	
 	public void clearTweets(){
 		this.tweets = new ArrayList<Tweet>();
+	}
+	
+	public void run() {
+		while(true){
+			this.clearTweets();
+			try {
+				this.searchTweets(searchTerm);
+			} catch (TwitterException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			for (int i = 0; i < this.getTweets().size();i++){
+				Tweet tweet = this.getTweets().get(i);
+				try {
+					if(!this.db.tweetExists(tweet)){
+						this.db.saveTweet(tweet);
+						tweet.printTweet();
+					}
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+			this.clearTweets();
+			try {
+				this.sleep(10 * 1000);//ReSchedule event for a minutes time
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
 	}
 	
 	//------------------------\\
