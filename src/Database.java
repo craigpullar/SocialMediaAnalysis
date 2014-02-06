@@ -51,20 +51,20 @@ public class Database {
 	//----------------\\
 	//--[[FUNCTIONS]]--\\
 	//-----------------\\
-	public void executeSQL(String SQL) throws SQLException{
-		this.setSQL(SQL);
-		this.statement = connection.createStatement();
-		this.statement.execute(SQL);
+	public void executeSQL(String SQL) throws SQLException{//Execute SQL function
+		this.setSQL(SQL);//Set SQL function
+		this.statement = connection.createStatement();//Create new statement
+		this.statement.execute(SQL);//Execute statement
 	}
 	//------------------------\\
 	//--[[SELECT FUNCTIONS]]--\\
 	//------------------------\\
-	public ArrayList<Tweet> selectAllTweets() throws SQLException{
-		ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-		String SQL = "SELECT * FROM Twitter_Tweet";
-		this.executeSQL(SQL);
-		ResultSet result = this.statement.getResultSet();
-		while (result.next()) {
+	public ArrayList<Tweet> selectAllTweets() throws SQLException{//Load all tweets function
+		ArrayList<Tweet> tweets = new ArrayList<Tweet>();//Create list
+		String SQL = "SELECT * FROM Twitter_Tweet";//Define SQL statement
+		this.executeSQL(SQL);//execute SQL
+		ResultSet result = this.statement.getResultSet();//Get results
+		while (result.next()) {//Loop through results
 			int ID = result.getInt("ID");
 			int userID = result.getInt("UserID");
 			String content = result.getString("Content");
@@ -72,18 +72,18 @@ public class Database {
 			double lat = result.getDouble("GeoLatitude");
 			double lon = result.getDouble("GeoLongitude");
 			GeoLocation location = new GeoLocation(lat,lon);
-			Tweet tweet = new Tweet(ID,userID,content,date,location);
-			tweets.add(tweet);
+			Tweet tweet = new Tweet(ID,userID,content,date,location);//Create tweets
+			tweets.add(tweet);//Add to list of tweets
 		}
-		return tweets;
+		return tweets;//Return list of tweets
 	}
 	
-	public boolean tweetExists(Tweet tweet) throws SQLException{
-		String SQL = "SELECT * FROM Twitter_Tweet ";
+	public boolean tweetExists(Tweet tweet) throws SQLException{//Function to check if tweet exists
+		String SQL = "SELECT * FROM Twitter_Tweet ";//Define SQL
 			SQL +=  "WHERE ID =" + tweet.getID();
-		this.executeSQL(SQL);
-		ResultSet result = this.statement.getResultSet();
-		if(result.next()){
+		this.executeSQL(SQL);//Execute SQL
+		ResultSet result = this.statement.getResultSet();//Get result
+		if(result.next()){//if there is result
 			return true;
 		}
 		return false;
@@ -91,8 +91,8 @@ public class Database {
 	//-----------------------------\\
 	//--[[SAVE OBJECT FUNCTIONS]]--\\
 	//-----------------------------\\
-	public void saveTweet(Tweet tweet) throws SQLException{
-		String SQL = "INSERT INTO Twitter_Tweet " +
+	public void saveTweet(Tweet tweet) throws SQLException{//Save tweet to the database
+		String SQL = "INSERT INTO Twitter_Tweet " +//Define SQL
 						"VALUES(" +
 						tweet.getID()+ "," +
 						tweet.getUserID() + "," +
@@ -101,7 +101,7 @@ public class Database {
 						tweet.getLocation().getLatitude() + "," +
 						tweet.getLocation().getLongitude() +
 						");";
-		this.executeSQL(SQL);
+		this.executeSQL(SQL);//Execute SQL
 	}
 	
 	//------------------------------\\

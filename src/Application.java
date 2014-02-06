@@ -18,16 +18,16 @@ public class Application {
 		
 		frame.getTwitterScrapeButton().addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {//If the scrape button is clicked
 				// TODO Auto-generated method stub
-				String searchTerm = frame.getSearchInput().getText();
-				scraper.setSearchTerm(searchTerm);
-				scraper.start();
+				String searchTerm = frame.getSearchInput().getText();//Get search term
+				scraper.setSearchTerm(searchTerm);//set the search term of the scraper
+				scraper.start();//Start scraping
 				}
 		});
 		
-		scraper.setTweets(db.selectAllTweets());
-		for (int i = 0; i < scraper.getTweets().size();i++){
+		scraper.setTweets(db.selectAllTweets());//Load tweets into memory
+		for (int i = 0; i < scraper.getTweets().size();i++){//Print tweets
 			Tweet tweet = scraper.getTweets().get(i);
 			tweet.printTweet();
 		}

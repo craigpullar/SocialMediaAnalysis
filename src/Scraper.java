@@ -33,35 +33,19 @@ public class Scraper extends Thread{
 	//--[[CONSTRUCTORS]]--\\
 	//--------------------\\
 	public Scraper(Database db){
-		this.db = this.setDb(db);
-		this.cb = new ConfigurationBuilder();
+		this.db = this.setDb(db);//creates a sb object to be used within the class
+		this.cb = new ConfigurationBuilder();//Configures the twitter developer account
 		this.tweets = new ArrayList<Tweet>();
 		this.users = new ArrayList<User>();
 		cb.setDebugEnabled(true)
 			.setOAuthConsumerKey("D6hyDIHzqSscjJNNUjzk9Q")
 			.setOAuthConsumerSecret("ZrhZJmzcoHOgZds3LWtXfVLD6pcCgTPoUaVc2cdrCA")
 			.setOAuthAccessToken("16239325-tBacRdawcrlxIb4pt6LUAilRPOErLsctHuWvax26u")
-			.setOAuthAccessTokenSecret("uWL2FyTMXREjK8dBfjbuDzo130tt4sYRu1Wu8n8WJEdFX");
-		this.twitterFactory = new TwitterFactory(cb.build());
-		this.twitter = this.twitterFactory.getInstance();
+			.setOAuthAccessTokenSecret("uWL2FyTMXREjK8dBfjbuDzo130tt4sYRu1Wu8n8WJEdFX");//Configuration ends here
+		this.twitterFactory = new TwitterFactory(cb.build());//Set the twitter object config to our config
+		this.twitter = this.twitterFactory.getInstance();//Get twitter
 	}
 	
-	public String getSearchTerm() {
-		return searchTerm;
-	}
-
-	public void setSearchTerm(String searchTerm) {
-		this.searchTerm = searchTerm;
-	}
-
-	public Database getDb() {
-		return db;
-	}
-
-	public Database setDb(Database db) {
-		return this.db = db;
-	}
-
 	//----------------\\
 	//--[[FUNCTIONS]]--\\
 	//-----------------\\
@@ -69,8 +53,10 @@ public class Scraper extends Thread{
 		Query query = new Query(searchTerm);//define the query
 		query.setCount(100);//Set number of tweets to return per page MAX 100
 		QueryResult result = this.twitter.search(query);//search and commit results to variable
+		
 	    for (Status status : result.getTweets()) {//Loop through results
 	    	twitter4j.User scrapedUser = status.getUser();//Get the user from the tweet
+	    	
 	    	//Get the tweet fields
 	    	long ID = status.getId();
 	    	long userID = scrapedUser.getId();
@@ -89,7 +75,7 @@ public class Scraper extends Thread{
 		    this.users.add(this.user);//add user to list of users
 
 	        this.tweet = new Tweet(ID,userID,content,date,location);//Create a tweet as defined by us
-	        this.tweets.add(tweet);
+	        this.tweets.add(tweet);//add tweet to list of tweets
 	    }
 	}
 	
@@ -97,21 +83,21 @@ public class Scraper extends Thread{
 		this.tweets = new ArrayList<Tweet>();
 	}
 	
-	public void run() {
+	public void run() {//Overide the thread function so when the thread starts this is run
 		while(true){
-			this.clearTweets();
+			this.clearTweets();//Clear memory of tweets
 			try {
-				this.searchTweets(searchTerm);
+				this.searchTweets(searchTerm);//Search for tweets
 			} catch (TwitterException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			for (int i = 0; i < this.getTweets().size();i++){
+			for (int i = 0; i < this.getTweets().size();i++){//Loop through tweets
 				Tweet tweet = this.getTweets().get(i);
 				try {
-					if(!this.db.tweetExists(tweet)){
-						this.db.saveTweet(tweet);
-						tweet.printTweet();
+					if(!this.db.tweetExists(tweet)){//if tweet does not exist in DB
+						this.db.saveTweet(tweet);//Save tweet to DB
+						tweet.printTweet();//Print tweet to console
 					}
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
@@ -119,9 +105,9 @@ public class Scraper extends Thread{
 				}
 				
 			}
-			this.clearTweets();
+			this.clearTweets();//Clear tweets from memory
 			try {
-				this.sleep(10 * 1000);//ReSchedule event for a minutes time
+				this.sleep(10 * 1000);//ReSchedule event for 10 seconds time
 			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -186,5 +172,20 @@ public class Scraper extends Thread{
 
 	public void setTweet(Tweet tweet) {
 		this.tweet = tweet;
+	}
+	public String getSearchTerm() {
+		return searchTerm;
+	}
+
+	public void setSearchTerm(String searchTerm) {
+		this.searchTerm = searchTerm;
+	}
+
+	public Database getDb() {
+		return db;
+	}
+
+	public Database setDb(Database db) {
+		return this.db = db;
 	}
 }
