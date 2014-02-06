@@ -60,7 +60,7 @@ public class Database {
 	//--[[SELECT FUNCTIONS]]--\\
 	//------------------------\\
 	public ArrayList<Tweet> selectAllTweets() throws SQLException{//Load all tweets function
-		ArrayList<Tweet> tweets = new ArrayList<Tweet>();//Create list
+		ArrayList<Tweet> tweets = new ArrayList<Tweet>();//Create list of tweets
 		String SQL = "SELECT * FROM Twitter_Tweet";//Define SQL statement
 		this.executeSQL(SQL);//execute SQL
 		ResultSet result = this.statement.getResultSet();//Get results
@@ -78,12 +78,44 @@ public class Database {
 		return tweets;//Return list of tweets
 	}
 	
+	public ArrayList<User> selectAllUsers() throws SQLException{
+		ArrayList<User> users = new ArrayList<User>();//Create list of users
+		String SQL = "SELECT * FROM Twitter_User";//Define SQL
+		this.executeSQL(SQL);//Execute SQL
+		ResultSet result = this.statement.getResultSet();//Get results
+		while (result.next()){
+			int ID = result.getInt("ID");
+			int noTweets = result.getInt("NoTweets");
+			int noFollowing = result.getInt("NoFollowing");
+			int noFollowers = result.getInt("NoFollowers");
+			String location = result.getString("Location");
+			Date joinDate = result.getDate("JoinDate");
+			User user = new User(ID,noTweets,noFollowing,noFollowers,location,joinDate);
+			users.add(user);
+		}
+		return users;
+	}
+	
+	//-----------------------\\
+	//--[[EXIST FUNCTIONS]]--\\
+	//-----------------------\\
 	public boolean tweetExists(Tweet tweet) throws SQLException{//Function to check if tweet exists
 		String SQL = "SELECT * FROM Twitter_Tweet ";//Define SQL
 			SQL +=  "WHERE ID =" + tweet.getID();
 		this.executeSQL(SQL);//Execute SQL
 		ResultSet result = this.statement.getResultSet();//Get result
-		if(result.next()){//if there is result
+		if(result.next()){//If there is a result
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean userExists(User user) throws SQLException {//Function to check if user exists
+		String SQL = "SELECT * FROM Twitter_User ";//Define SQL
+			SQL += "WHERE ID =" + user.getID();
+		this.executeSQL(SQL);//Execute SQL
+		ResultSet result = this.statement.getResultSet();//Get result
+		if(result.next()){//If there is a result
 			return true;
 		}
 		return false;
@@ -102,6 +134,19 @@ public class Database {
 						tweet.getLocation().getLongitude() +
 						");";
 		this.executeSQL(SQL);//Execute SQL
+	}
+	
+	public void saveUser(User user) throws SQLException{
+		String SQL = "INSERT INTO Twitter_User " +
+						"VALUES(" +
+						user.getID() + "," +
+						user.getNoTweets() + "," +
+						user.getNoFollowing() + "," +
+						user.getNoFollowers() + "," +
+						"'" + user.getLocation() + "'," +
+						"'" + user.getJoinDate() + "'" +
+						");";
+		this.executeSQL(SQL);
 	}
 	
 	//------------------------------\\
