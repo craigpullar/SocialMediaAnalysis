@@ -11,7 +11,10 @@ public class Analysis {
 	//--------------------\\
 	//--[[CONSTRUCTORS]]--\\
 	//--------------------\\
-	public Analysis(int ID, String searchTerm){
+	public Analysis (String searchTerm){
+		this.searchTerm = searchTerm;
+	}
+	public Analysis (int ID,String searchTerm){
 		this.ID = ID;
 		this.searchTerm = searchTerm;
 	}

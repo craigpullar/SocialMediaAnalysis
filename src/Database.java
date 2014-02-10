@@ -56,6 +56,28 @@ public class Database {
 		this.statement = connection.createStatement();//Create new statement
 		this.statement.execute(SQL);//Execute statement
 	}
+	//-----------------------\\
+	//--[[SEARCH FUNCTIONS]]--\\
+	//------------------------\\
+	
+	public ArrayList<Tweet> searchTweets(String searchTerm) throws SQLException {
+		ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+		String SQL = "SELECT * FROM Twitter_Tweet WHERE Content LIKE '%" + searchTerm + "%'";
+		this.executeSQL(SQL);
+		ResultSet result = this.statement.getResultSet();//Get results
+		while (result.next()) {//Loop through results
+			int ID = result.getInt("ID");
+			int userID = result.getInt("UserID");
+			String content = result.getString("Content");
+			Date date = result.getDate("Date");
+			double lat = result.getDouble("GeoLatitude");
+			double lon = result.getDouble("GeoLongitude");
+			GeoLocation location = new GeoLocation(lat,lon);
+			Tweet tweet = new Tweet(ID,userID,content,date,location);//Create tweets
+			tweets.add(tweet);//Add to list of tweets
+		}
+		return tweets;
+	}
 	//------------------------\\
 	//--[[SELECT FUNCTIONS]]--\\
 	//------------------------\\
@@ -149,6 +171,15 @@ public class Database {
 		this.executeSQL(SQL);
 	}
 	
+	public void saveAnalysis(Analysis analysis) throws SQLException{
+		String SQL = "INSERT INTO Analysis (ID,SearchTerm)" +
+						"VALUES(" +
+						"null," +
+						"'" + analysis.getSearchTerm() + "'" +
+						");";
+		this.executeSQL(SQL);				
+	}
+	
 	//------------------------------\\
 	//--[[CREATE TABLE FUNCTIONS]]--\\
 	//------------------------------\\
@@ -202,10 +233,9 @@ public class Database {
 	
 	//--[[Analysis Table]]--\\
 	public void Analysis() throws SQLException{
-		String SQL = "CREATE TABLE Anaylsis(" +
-					"ID INT NOT NULL," +
-					"SearchTerm text not null," +
-					"PRIMARY KEY (ID)" +
+		String SQL = "CREATE TABLE Analysis(" +
+					"ID INTEGER PRIMARY KEY NOT NULL," +
+					"SearchTerm text not null" +
 					");";
 		this.executeSQL(SQL);
 	}

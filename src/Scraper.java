@@ -28,6 +28,7 @@ public class Scraper extends Thread{
 	private Tweet tweet;
 	private String searchTerm;
 	private Database db;
+	private boolean running;
 	
 	//--------------------\\
 	//--[[CONSTRUCTORS]]--\\
@@ -44,6 +45,8 @@ public class Scraper extends Thread{
 			.setOAuthAccessTokenSecret("uWL2FyTMXREjK8dBfjbuDzo130tt4sYRu1Wu8n8WJEdFX");//Configuration ends here
 		this.twitterFactory = new TwitterFactory(cb.build());//Set the twitter object config to our config
 		this.twitter = this.twitterFactory.getInstance();//Get twitter
+		this.running = false;
+		this.start();
 	}
 	
 	//----------------\\
@@ -85,36 +88,68 @@ public class Scraper extends Thread{
 	
 	public void run() {//Overide the thread function so when the thread starts this is run
 		while(true){
-			this.clearTweets();//Clear memory of tweets
-			try {
-				this.searchTweets(searchTerm);//Search for tweets
-			} catch (TwitterException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			for (int i = 0; i < this.getTweets().size();i++){//Loop through tweets
-				Tweet tweet = this.getTweets().get(i);
+			while(this.isRunning()){
+				if (!this.isRunning()){
+					this.setRunning(false);
+				}
+				this.clearTweets();//Clear memory of tweets
 				try {
-					if(!this.db.tweetExists(tweet)){//if tweet does not exist in DB
-						this.db.saveTweet(tweet);//Save tweet to DB
-						tweet.printTweet();//Print tweet to console
-					}
-				} catch (SQLException e1) {
+					this.searchTweets(searchTerm);//Search for tweets
+				} catch (TwitterException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
+				for (int i = 0; i < this.getTweets().size();i++){//Loop through tweets
+					Tweet tweet = this.getTweets().get(i);
+					try {
+						if(!this.db.tweetExists(tweet)){//if tweet does not exist in DB
+							this.db.saveTweet(tweet);//Save tweet to DB
+							tweet.printTweet();//Print tweet to console
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+				}
+				this.clearTweets();//Clear tweets from memory
+				
+				for (int i = 0; i < this.getUsers().size(); i++) {//Loop through users
+					User user = this.getUsers().get(i);
+					try {
+						if (!this.db.userExists(user)) {//If user does not exist in DB
+							this.db.saveUser(user);//Save user to DB
+							System.out.println("USER SAVED!");
+						}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				try {
+					this.sleep(10 * 1000);//ReSchedule event for 10 seconds time
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
-			this.clearTweets();//Clear tweets from memory
-			try {
-				this.sleep(10 * 1000);//ReSchedule event for 10 seconds time
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			while(!this.isRunning()){
+				if(this.isRunning()) {
+					this.setRunning(true);
+				}
 			}
 		}
 	}
 	
+	public boolean isRunning() {
+		return this.running;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
+	}
+
 	//------------------------\\
 	//--[[GETTER & SETTERS]]--\\
 	//------------------------\\

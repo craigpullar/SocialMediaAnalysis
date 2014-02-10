@@ -18,6 +18,7 @@ public class Frame extends JFrame{
 	private static final int HEIGHT = 300; //HEIGHT Variable
 	private JButton twitterScrapeButton;
 	private JTextField searchInput;
+	private JLabel scrapeStatus;
 	
 	//-------------------\\
 	//--[[CONSTRUCTOR]]--\\
@@ -29,7 +30,7 @@ public class Frame extends JFrame{
 			pane.setLayout(new GridLayout(2, 1));
 			
 			JTabbedPane App = new JTabbedPane();
-		
+			
 			//creates the tabbed template on the application
 			getContentPane().add(App);
 			//create tabs
@@ -47,7 +48,8 @@ public class Frame extends JFrame{
             //creates TextField for Searching
             this.searchInput = new JTextField("Search");
             JTextField newSearch1 = new JTextField("Search");
-		
+            
+            this.scrapeStatus = new JLabel("Not currently scraping");
 			//creates the label for the tabs
 			JLabel firstTab = new JLabel();
 			firstTab.setText("Click Scrape");
@@ -56,6 +58,7 @@ public class Frame extends JFrame{
             Tab1.add(searchInput);
             //add button to tab1
             Tab1.add(twitterScrapeButton);
+            Tab1.add(this.scrapeStatus);
 		
 			JLabel secondTab = new JLabel();
 			secondTab.setText("Click Scrape");
@@ -74,6 +77,14 @@ public class Frame extends JFrame{
 	//-------------------------\\
 	//--[[GETTERS & SETTERS]]--\\
 	//-------------------------\\
+
+	public JLabel getScrapeStatus() {
+		return scrapeStatus;
+	}
+
+	public void setScrapeStatus(JLabel scrapeStatus) {
+		this.scrapeStatus = scrapeStatus;
+	}
 
 	public JButton getTwitterScrapeButton() {
 		return twitterScrapeButton;
