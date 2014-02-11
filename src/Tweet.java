@@ -27,9 +27,11 @@ public class Tweet {
 		this.setUserID(userID);
 		this.setContent(content);
 		this.setDate(date);
-		this.setLocation(location);
-		if (this.getLocation()== null){
+		if(location == null) {
 			this.setLocation(new GeoLocation(0,0));
+		}
+		else {
+			this.setLocation(location);
 		}
 	}
 

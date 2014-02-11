@@ -165,7 +165,7 @@ public class Database {
 						user.getNoTweets() + "," +
 						user.getNoFollowing() + "," +
 						user.getNoFollowers() + "," +
-						"'" + user.getLocation() + "'," +
+						"'" + user.getLocation().replace("'", "!") + "'," +
 						"'" + user.getJoinDate() + "'" +
 						");";
 		this.executeSQL(SQL);
@@ -199,8 +199,8 @@ public class Database {
 				"UserID INT NOT NULL," +
 				"Content varchar(160) NOT NULL," +
 				"Date DATE NOT NULL," +
-				"GeoLatitude INT," +
-				"GeoLongitude INT," +
+				"GeoLatitude LONG," +
+				"GeoLongitude LONG," +
 				"PRIMARY KEY (ID)" +
 				"FOREIGN KEY(UserID) References Twitter_User(ID)" +
 				");";
