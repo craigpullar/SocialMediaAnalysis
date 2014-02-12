@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="libs/hbc-master.zip"/>
 	<classpathentry kind="lib" path="libs/sqlite-jdbc-3.7.2.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Craig/Documents/GitHub/SocialMediaAnalysis/libs/twitter4j-core-3.0.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Craig/Documents/GitHub/SocialMediaAnalysis/libs/lingpipe-4.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
