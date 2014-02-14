@@ -17,7 +17,7 @@ public class Database {
 	//---------------\\
 	private Connection connection;
 	static final String JDBC_DRIVER = "org.sqlite.JDBC";  
-	static final String DB_URL = "jdbc:sqlite:data.db";
+	static final String DB_URL = "jdbc:sqlite:rsrc/data.db";
 	private String SQL;
 	private File file;
 	private Boolean dbExists;
@@ -30,7 +30,7 @@ public class Database {
 		Class.forName(JDBC_DRIVER);
 		
 		//Check if the database file exists//
-		file = new File("data.db");
+		file = new File("rsrc/data.db");
 		if (file.exists()){
 			this.dbExists = true;//Sets a boolean to true if it does exist
 		}
@@ -180,6 +180,16 @@ public class Database {
 		this.executeSQL(SQL);				
 	}
 	
+	public void saveSentiment(Sentiment sentiment) throws SQLException {
+		String SQL = "INSERT INTO Twitter_Tweet_Sentiment_Analysis " +
+						"VALUES(" +
+						sentiment.getTweetID() + "," +
+						sentiment.getAnalysisID() + "," +
+						sentiment.getSentiment() +
+						");";
+		this.executeSQL(SQL);
+	}
+	
 	//------------------------------\\
 	//--[[CREATE TABLE FUNCTIONS]]--\\
 	//------------------------------\\
@@ -243,13 +253,12 @@ public class Database {
 	//--[[Twitter Analysis Tables]]--\\
 	public void twitterSentiment() throws SQLException{
 		String SQL = "CREATE TABLE Twitter_Tweet_Sentiment_Analysis(" +
-				"ID INT NOT NULL," +
 				"TweetID INT NOT NULL FOREIGN KEY," +
 				"Sentiment INT NOT NULL," +
 				"AnalysisID INT NOT NULL FOREIGN KEY," +
 				"FOREIGN KEY TweetID references Twitter_Tweer(ID)," +
 				"FOREIGN KEY (AnalysisID) references Analysis(ID)," +
-				"PRIMARY KEY (ID)" +
+				"PRIMARY KEY (TweetID)" +
 				");";
 		this.executeSQL(SQL);
 	}

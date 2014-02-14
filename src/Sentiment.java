@@ -4,16 +4,14 @@ public class Sentiment {
 	//--------------\\
 	//--[[DECLARE]]--\\
 	//---------------\\
-	private int ID;
-	private int tweetID;
+	private long tweetID;
 	private int analysisID;
 	private int sentiment;
 	
 	//--------------------\\
 	//--[[CONSTRUCTORS]]--\\
 	//--------------------\\
-	public Sentiment(int ID, int tweetID, int analysisID, int sentiment){
-		this.ID = ID;
+	public Sentiment(long tweetID, int analysisID, int sentiment) {
 		this.tweetID = tweetID;
 		this.analysisID = analysisID;
 		this.sentiment = sentiment;
@@ -22,16 +20,10 @@ public class Sentiment {
 	//------------------------\\
 	//--[[GETTERS & SETTERS]]--\\
 	//-------------------------\\
-	public int getID() {
-		return ID;
-	}
-	public void setID(int iD) {
-		ID = iD;
-	}
-	public int getTweetID() {
+	public long getTweetID() {
 		return tweetID;
 	}
-	public void setTweetID(int tweetID) {
+	public void setTweetID(long tweetID) {
 		this.tweetID = tweetID;
 	}
 	public int getAnalysisID() {

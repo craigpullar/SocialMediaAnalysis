@@ -24,12 +24,14 @@ public class Application {
 				if (!scraper.isRunning()){
 					String searchTerm = frame.getSearchInput().getText();//Get search term
 					Analysis analysis = new Analysis(searchTerm);//Create analysis object
+					Analyser analyser = new Analyser(analysis);
 					try {
-						db.saveAnalysis(analysis);//Save analysis object
+						db.saveAnalysis(analysis);
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					}
+					}//Save analysis object
+
 					frame.getScrapeStatus().setText("Scraping..");
 					scraper.setSearchTerm(searchTerm);//set the search term of the scraper
 					scraper.setRunning(true);

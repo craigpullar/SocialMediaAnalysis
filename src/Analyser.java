@@ -1,3 +1,7 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -10,6 +14,8 @@ public class Analyser {
 	private ArrayList<Sentiment> sentiments;
 	private Location location;
 	private ArrayList<Location> locations;
+	private BufferedReader fileReader;
+	private String adjective;
 	
 	//--------------------\\
 	//--[[CONSTRUCTORS]]--\\
@@ -20,8 +26,20 @@ public class Analyser {
 	//-----------------\\
 	//--[[FUNCTIONS]]--\\
 	//-----------------\\
-	public ArrayList<Sentiment> sentimentAnalysis(ArrayList<Tweet> tweets) {
-		
+	public ArrayList<Sentiment> sentimentAnalysis(ArrayList<Tweet> tweets) throws IOException {
+		File[] files = {new File("rsrc/positives.txt"), new File("rsrc/negatives.txt")};
+		for (int i = 0; i < files.length; i++){
+			this.fileReader = new BufferedReader(new FileReader(file));
+			this.adjective = this.fileReader.readLine();
+			while(this.adjective != null) {
+				for(Tweet tweet:tweets){
+					if(tweet.getContent().contains(this.adjective)) {
+						Sentiment sentiment = new Sentiment(tweet.getID(),this.analysis.getID(),i);
+					}
+				}
+				this.adjective = this.fileReader.readLine();
+			}
+		}
 		return this.sentiments;
 	}
 	
