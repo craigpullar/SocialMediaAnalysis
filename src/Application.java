@@ -33,7 +33,7 @@ public class Application {
 					}//Save analysis object
 
 					frame.getScrapeStatus().setText("Scraping..");
-					scraper.setSearchTerm(searchTerm);//set the search term of the scraper
+					scraper.setAnalysis(analysis);//set the search term of the scraper
 					scraper.setRunning(true);
 				}
 				else {

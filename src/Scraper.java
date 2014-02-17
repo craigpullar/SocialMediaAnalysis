@@ -26,9 +26,9 @@ public class Scraper extends Thread{
 	private ArrayList<User> users;
 	private User user;
 	private Tweet tweet;
-	private String searchTerm;
 	private Database db;
 	private boolean running;
+	private Analysis analysis;
 	
 	//--------------------\\
 	//--[[CONSTRUCTORS]]--\\
@@ -38,6 +38,7 @@ public class Scraper extends Thread{
 		this.cb = new ConfigurationBuilder();//Configures the twitter developer account
 		this.tweets = new ArrayList<Tweet>();
 		this.users = new ArrayList<User>();
+		this.setAnalysis(analysis);
 		cb.setDebugEnabled(true)
 			.setOAuthConsumerKey("D6hyDIHzqSscjJNNUjzk9Q")
 			.setOAuthConsumerSecret("ZrhZJmzcoHOgZds3LWtXfVLD6pcCgTPoUaVc2cdrCA")
@@ -94,7 +95,7 @@ public class Scraper extends Thread{
 				}
 				this.clearTweets();//Clear memory of tweets
 				try {
-					this.searchTweets(searchTerm);//Search for tweets
+					this.searchTweets(analysis.getSearchTerm());//Search for tweets
 				} catch (TwitterException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -104,7 +105,7 @@ public class Scraper extends Thread{
 					Tweet tweet = this.getTweets().get(i);
 					try {
 						if(!this.db.tweetExists(tweet)){//if tweet does not exist in DB
-							this.db.saveTweet(tweet);//Save tweet to DB
+							this.db.saveTweet(tweet,this.analysis);//Save tweet to DB
 							tweet.printTweet();//Print tweet to console
 						}
 					} catch (SQLException e1) {
@@ -142,6 +143,11 @@ public class Scraper extends Thread{
 		}
 	}
 	
+
+
+	//------------------------\\
+	//--[[GETTER & SETTERS]]--\\
+	//------------------------\\
 	public boolean isRunning() {
 		return this.running;
 	}
@@ -149,10 +155,7 @@ public class Scraper extends Thread{
 	public void setRunning(boolean running) {
 		this.running = running;
 	}
-
-	//------------------------\\
-	//--[[GETTER & SETTERS]]--\\
-	//------------------------\\
+	
 	public Twitter getTwitter() {
 		return twitter;
 	}
@@ -208,13 +211,6 @@ public class Scraper extends Thread{
 	public void setTweet(Tweet tweet) {
 		this.tweet = tweet;
 	}
-	public String getSearchTerm() {
-		return searchTerm;
-	}
-
-	public void setSearchTerm(String searchTerm) {
-		this.searchTerm = searchTerm;
-	}
 
 	public Database getDb() {
 		return db;
@@ -222,5 +218,13 @@ public class Scraper extends Thread{
 
 	public Database setDb(Database db) {
 		return this.db = db;
+	}
+	
+	public Analysis getAnalysis() {
+		return analysis;
+	}
+
+	public void setAnalysis(Analysis analysis) {
+		this.analysis = analysis;
 	}
 }

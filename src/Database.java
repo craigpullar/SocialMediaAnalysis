@@ -145,7 +145,7 @@ public class Database {
 	//-----------------------------\\
 	//--[[SAVE OBJECT FUNCTIONS]]--\\
 	//-----------------------------\\
-	public void saveTweet(Tweet tweet) throws SQLException{//Save tweet to the database
+	public void saveTweet(Tweet tweet,Analysis analysis) throws SQLException{//Save tweet to the database
 		String SQL = "INSERT INTO Twitter_Tweet " +//Define SQL
 						"VALUES(" +
 						tweet.getID()+ "," +
@@ -153,7 +153,8 @@ public class Database {
 						"'" + tweet.getContent().replace("'", "!") + "'," +
 						"'" + tweet.getDate() + "'," +
 						tweet.getLocation().getLatitude() + "," +
-						tweet.getLocation().getLongitude() +
+						tweet.getLocation().getLongitude() + "," +
+						analysis.getID() +
 						");";
 		this.executeSQL(SQL);//Execute SQL
 	}
@@ -174,7 +175,7 @@ public class Database {
 	public void saveAnalysis(Analysis analysis) throws SQLException{
 		String SQL = "INSERT INTO Analysis (ID,SearchTerm)" +
 						"VALUES(" +
-						"null," +
+						analysis.getID() +"," +
 						"'" + analysis.getSearchTerm() + "'" +
 						");";
 		this.executeSQL(SQL);				
@@ -211,7 +212,9 @@ public class Database {
 				"Date DATE NOT NULL," +
 				"GeoLatitude LONG," +
 				"GeoLongitude LONG," +
+				"AnalysisID INT NOT NULL," +
 				"PRIMARY KEY (ID)" +
+				"FOREIGN KEY(AnalysisID) References Analysis(ID)" +
 				"FOREIGN KEY(UserID) References Twitter_User(ID)" +
 				");";
 		this.executeSQL(SQL);

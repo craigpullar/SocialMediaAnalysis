@@ -29,7 +29,7 @@ public class Analyser {
 	public ArrayList<Sentiment> sentimentAnalysis(ArrayList<Tweet> tweets) throws IOException {
 		File[] files = {new File("rsrc/positives.txt"), new File("rsrc/negatives.txt")};
 		for (int i = 0; i < files.length; i++){
-			this.fileReader = new BufferedReader(new FileReader(file));
+			this.fileReader = new BufferedReader(new FileReader(files[i]));
 			this.adjective = this.fileReader.readLine();
 			while(this.adjective != null) {
 				for(Tweet tweet:tweets){
