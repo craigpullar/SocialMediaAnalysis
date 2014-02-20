@@ -13,7 +13,7 @@ public class Analysis {
 	//--------------------\\
 	public Analysis (String searchTerm){
 		this.searchTerm = searchTerm;
-		this.ID = (int) (Math.random() * 99999999);
+		this.setID((int) (Math.random() * 99999999));
 	}
 	public Analysis (int ID,String searchTerm){
 		this.ID = ID;

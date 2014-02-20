@@ -60,6 +60,20 @@ public class Database {
 	//--[[SEARCH FUNCTIONS]]--\\
 	//------------------------\\
 	
+	public ArrayList<Analysis> selectAllAnalysis() throws SQLException {
+		ArrayList<Analysis> analysisList = new ArrayList<Analysis>();
+		String SQL = "SELECT * FROM Analysis";
+		this.executeSQL(SQL);
+		ResultSet result = this.statement.getResultSet();
+		while(result.next()) {
+			int ID = result.getInt("ID");
+			String searchTerm = result.getString("SearchTerm");
+			Analysis analysis = new Analysis(ID,searchTerm);
+			analysisList.add(analysis);
+		}
+		return analysisList;
+		
+	}
 	public ArrayList<Tweet> searchTweets(String searchTerm) throws SQLException {
 		ArrayList<Tweet> tweets = new ArrayList<Tweet>();
 		String SQL = "SELECT * FROM Twitter_Tweet WHERE Content LIKE '%" + searchTerm + "%'";

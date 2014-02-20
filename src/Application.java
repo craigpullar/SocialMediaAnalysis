@@ -11,9 +11,10 @@ public class Application {
 	
 	public static void main(String[] args) throws Exception {
 		@SuppressWarnings("unused")
-		final Frame frame = new Frame();
 		final Database db = new Database();
+		final Frame frame = new Frame(db);
 		final Scraper scraper = new Scraper(db);
+		
 		
 		
 		frame.getTwitterScrapeButton().addActionListener(new ActionListener(){
@@ -25,6 +26,7 @@ public class Application {
 					String searchTerm = frame.getSearchInput().getText();//Get search term
 					Analysis analysis = new Analysis(searchTerm);//Create analysis object
 					Analyser analyser = new Analyser(analysis);
+					System.out.println(analysis.getID());
 					try {
 						db.saveAnalysis(analysis);
 					} catch (SQLException e1) {

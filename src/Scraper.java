@@ -90,9 +90,6 @@ public class Scraper extends Thread{
 	public void run() {//Overide the thread function so when the thread starts this is run
 		while(true){
 			while(this.isRunning()){
-				if (!this.isRunning()){
-					this.setRunning(false);
-				}
 				this.clearTweets();//Clear memory of tweets
 				try {
 					this.searchTweets(analysis.getSearchTerm());//Search for tweets
@@ -102,6 +99,7 @@ public class Scraper extends Thread{
 				}
 				
 				for (int i = 0; i < this.getTweets().size();i++){//Loop through tweets
+					if(!this.isRunning()) break;
 					Tweet tweet = this.getTweets().get(i);
 					try {
 						if(!this.db.tweetExists(tweet)){//if tweet does not exist in DB
@@ -117,6 +115,7 @@ public class Scraper extends Thread{
 				this.clearTweets();//Clear tweets from memory
 				
 				for (int i = 0; i < this.getUsers().size(); i++) {//Loop through users
+					if(!this.isRunning()) break;
 					User user = this.getUsers().get(i);
 					try {
 						if (!this.db.userExists(user)) {//If user does not exist in DB
@@ -136,9 +135,7 @@ public class Scraper extends Thread{
 				}
 			}
 			while(!this.isRunning()){
-				if(this.isRunning()) {
-					this.setRunning(true);
-				}
+				if(this.isRunning()) this.setRunning(true);
 			}
 		}
 	}
