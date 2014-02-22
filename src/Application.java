@@ -26,7 +26,6 @@ public class Application {
 					String searchTerm = frame.getSearchInput().getText();//Get search term
 					Analysis analysis = new Analysis(searchTerm);//Create analysis object
 					Analyser analyser = new Analyser(analysis);
-					System.out.println(analysis.getID());
 					try {
 						db.saveAnalysis(analysis);
 					} catch (SQLException e1) {
@@ -37,10 +36,17 @@ public class Application {
 					frame.getScrapeStatus().setText("Scraping..");
 					scraper.setAnalysis(analysis);//set the search term of the scraper
 					scraper.setRunning(true);
+
 				}
 				else {
 					scraper.setRunning(false);
 					frame.getScrapeStatus().setText("Not currently scraping");
+					try {
+						frame.fillAnalysisList(db);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});

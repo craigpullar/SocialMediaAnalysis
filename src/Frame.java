@@ -16,6 +16,7 @@ public class Frame extends JFrame //FRAME
     private JTextField searchInput;
     private JLabel scrapeStatus;
     private JButton twitterScrapeButton;
+    private JPanel Tab3;
     
     public Frame(Database db) throws SQLException
 		{
@@ -42,9 +43,10 @@ public class Frame extends JFrame //FRAME
             //create tabs
 			JPanel Tab1 = new JPanel();
 			JPanel Tab2 = new JPanel();
-            JPanel Tab3 = new JPanel();
+            this.Tab3 = new JPanel();
             
-            
+            //
+            this.setAnalysisList(new JComboBox());
             JPanel Tab31 = new JPanel();
             Tab31.setBackground (Color.RED);
             //Tab31.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -115,8 +117,7 @@ public class Frame extends JFrame //FRAME
             Tab34.add(new JLabel("Raw Data"));
             Tab35.add(new JLabel("Tag Cloud"));
             
-            //Create list of analysis
-            this.fillAnalysisList(db);
+
             
             //Adds JPanels to Tab3
             Tab3.add(this.getAnalysisList());
@@ -125,6 +126,9 @@ public class Frame extends JFrame //FRAME
             Tab3.add(Tab33);
             Tab3.add(Tab34);
             Tab3.add(Tab35);
+            
+            //Create list of analysis
+            this.fillAnalysisList(db);
             
 			//JFrame Properties
             this.pack();
@@ -139,12 +143,16 @@ public class Frame extends JFrame //FRAME
     //--[[FUNCTIONS]]--\\
     //-----------------\\
     public void fillAnalysisList(Database db) throws SQLException {
+    	//this.setAnalysisList(new JComboBox());
+    	this.Tab3.remove(this.getAnalysisList());
     	ArrayList<Analysis> analysisList = db.selectAllAnalysis();
     	ArrayList<String> searchTerms = new ArrayList<String>();
     	for (Analysis analysis: analysisList){
     		searchTerms.add(analysis.getSearchTerm());
     	}
-    	this.setAnalysisList(new JComboBox(searchTerms.toArray()));
+    	DefaultComboBoxModel model = new DefaultComboBoxModel( searchTerms.toArray() );
+    	this.getAnalysisList().setModel(model);
+    	this.Tab3.add(this.getAnalysisList());
     }
 	
 	//------------------------\\
