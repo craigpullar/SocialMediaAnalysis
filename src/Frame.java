@@ -10,13 +10,21 @@ import javax.swing.*;
 
 public class Frame extends JFrame //FRAME
 {
-	private static final int WIDTH = 400; //WIDTH variable
-	private static final int HEIGHT = 300; //HEIGHT Variable
+	private static final int WIDTH = 800; //WIDTH variable
+	private static final int HEIGHT = 600; //HEIGHT Variable
     private	JComboBox<Analysis> analysisList;
     private JTextField searchInput;
     private JLabel scrapeStatus;
     private JButton twitterScrapeButton;
-    private JPanel Tab3;
+    
+
+	private JPanel Tab3;
+    private JPanel AnalsisPanel;
+    private JTabbedPane resultsPanel;
+    
+    
+    //Declare Raw data components
+    private JTextArea rawDataDisplay;
     
     public Frame(Database db) throws SQLException
 		{
@@ -25,7 +33,7 @@ public class Frame extends JFrame //FRAME
 			//pane.setLayout(new GridLayout(2, 1));
 			
 			JTabbedPane App = new JTabbedPane();
-            this.setLayout(null);
+            
             this.setContentPane(App);
 		
 			//creates the tabbed template on the application
@@ -53,7 +61,6 @@ public class Frame extends JFrame //FRAME
             
             JPanel Tab32 = new JPanel();
             Tab32.setBackground (Color.BLUE);
-            Tab32.setBounds(5, 5, 25, 25);
             
             JPanel Tab33 = new JPanel();
             Tab33.setBackground (Color.GREEN);
@@ -66,21 +73,13 @@ public class Frame extends JFrame //FRAME
             JPanel Tab35 = new JPanel();
             Tab35.setBackground (Color.PINK);
             //Tab35.setAlignmentX(Component.LEFT_ALIGNMENT);
-    
-            /*
-            //Adds ComboBox to Tab3
-            combo = new JComboBox();
-            Tab3.add(combo);
-            //Populates the list
-            for(int i = 0; i < rList.length; i++)
-                combo.addItem(rList[i]);  // Populates the list from rList */
-            
-            
+        
 			//add the tabs to out Tabbed Pane and names them
 			App.addTab("Twitter", Tab1);
 			App.addTab("Flicker", Tab2);
             App.addTab("Results", Tab3);
             
+            Tab3.setLayout(new GridLayout(3,1));
             //creates buttons to the tabbed pages
 			this.setTwitterScrapeButton(new JButton("Scrape"));
             this.getTwitterScrapeButton().setBounds(5,5,20,20);
@@ -110,25 +109,31 @@ public class Frame extends JFrame //FRAME
             Tab2.add(test1);
             //Tab2.add(secondTab);
             
-            //Adds Text Area to Tab31
-            Tab31.add(new JLabel("Map"));
-            Tab32.add(new JLabel("Date Range"));
-            Tab33.add(new JLabel("Pie Chart"));
-            Tab34.add(new JLabel("Raw Data"));
-            Tab35.add(new JLabel("Tag Cloud"));
+            //Create raw data components
+            this.setRawDataDisplay(new JTextArea());
             
-
+            //results panel
+            this.setResultsPanel(new JTabbedPane());
+            Tab3.add(this.getResultsPanel());
             
-            //Adds JPanels to Tab3
-            Tab3.add(this.getAnalysisList());
-            Tab3.add(Tab31);
-            Tab3.add(Tab32);
-            Tab3.add(Tab33);
-            Tab3.add(Tab34);
-            Tab3.add(Tab35);
+            //Sentiment
+            
+            
+            //Analysis Panel
+            this.setAnalsisPanel(new JPanel());
+            Tab3.add(this.getAnalsisPanel());
+            this.getAnalsisPanel().add(this.getAnalysisList());
             
             //Create list of analysis
             this.fillAnalysisList(db);
+            this.fillRawData(db);
+            
+            //Adds JPanels to results panel
+            this.getResultsPanel().add("Map",Tab31);
+            this.getResultsPanel().add("Sentiment",Tab32);
+            this.getResultsPanel().add("Pie Chart",Tab33);
+            this.getResultsPanel().add("Raw Data",new JScrollPane(this.getRawDataDisplay()));
+            this.getResultsPanel().add("Tag Cloud",Tab35);
             
 			//JFrame Properties
             this.pack();
@@ -153,6 +158,22 @@ public class Frame extends JFrame //FRAME
     	DefaultComboBoxModel model = new DefaultComboBoxModel( searchTerms.toArray() );
     	this.getAnalysisList().setModel(model);
     	this.Tab3.add(this.getAnalysisList());
+    	
+    }
+    
+    public void fillRawData(Database db) throws SQLException {
+    	this.getRawDataDisplay().setEditable(false);
+    	this.getRawDataDisplay().setBackground(null);
+    	this.getRawDataDisplay().setAutoscrolls(true);
+    	ArrayList<Tweet> tweets= db.searchTweets(this.getAnalysisList().getItemAt(0).toString());
+    	for (Tweet tweet:tweets){
+    		this.getRawDataDisplay().append("//----------------------------------\\ \n");
+    		this.getRawDataDisplay().append("TweetID: " + tweet.getID() + "\n");
+    		this.getRawDataDisplay().append("UserID: " + tweet.getUserID() + "\n");
+    		this.getRawDataDisplay().append("Content: " + tweet.getContent().toString() + "\n");
+    		this.getRawDataDisplay().append("Date: " + tweet.getDate().toString() + "\n");
+    		this.getRawDataDisplay().append("Location: " + tweet.getLocation().toString() + "\n");
+    	}
     }
 	
 	//------------------------\\
@@ -189,6 +210,45 @@ public class Frame extends JFrame //FRAME
 
 	public void setAnalysisList(JComboBox analysisList) {
 		this.analysisList = analysisList;
+	}
+
+	public JTextArea getRawDataDisplay() {
+		return rawDataDisplay;
+	}
+
+	public void setRawDataDisplay(JTextArea jTextArea) {
+		this.rawDataDisplay = jTextArea;
+	}
+
+	public JPanel getAnalsisPanel() {
+		return AnalsisPanel;
+	}
+
+	public void setAnalsisPanel(JPanel analsisPanel) {
+		AnalsisPanel = analsisPanel;
+	}
+	public JPanel getTab3() {
+		return Tab3;
+	}
+
+	public void setTab3(JPanel tab3) {
+		Tab3 = tab3;
+	}
+
+	public JTabbedPane getResultsPanel() {
+		return resultsPanel;
+	}
+
+	public void setResultsPanel(JTabbedPane resultsPanel) {
+		this.resultsPanel = resultsPanel;
+	}
+
+	public int getWidth() {
+		return WIDTH;
+	}
+
+	public int getHeight() {
+		return HEIGHT;
 	}
 		
 }
