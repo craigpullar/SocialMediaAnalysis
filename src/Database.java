@@ -76,7 +76,7 @@ public class Database {
 	}
 	public ArrayList<Tweet> searchTweets(String searchTerm) throws SQLException {
 		ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-		String SQL = "SELECT * FROM Twitter_Tweet WHERE Content LIKE '%" + searchTerm + "%'";
+		String SQL = "SELECT * FROM Twitter_Tweet WHERE Content LIKE '% " + searchTerm + " %'";
 		this.executeSQL(SQL);
 		ResultSet result = this.statement.getResultSet();//Get results
 		while (result.next()) {//Loop through results

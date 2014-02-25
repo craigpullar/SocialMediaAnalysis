@@ -2,11 +2,27 @@
 //add drop down list
 
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class Frame extends JFrame //FRAME
 {
@@ -126,7 +142,9 @@ public class Frame extends JFrame //FRAME
             
             //Create list of analysis
             this.fillAnalysisList(db);
-            this.fillRawData(db);
+            this.fillRawData(db,0);
+            
+
             
             //Adds JPanels to results panel
             this.getResultsPanel().add("Map",Tab31);
@@ -161,11 +179,12 @@ public class Frame extends JFrame //FRAME
     	
     }
     
-    public void fillRawData(Database db) throws SQLException {
+    public void fillRawData(Database db,int index) throws SQLException {
+    	this.getRawDataDisplay().setText(null);
     	this.getRawDataDisplay().setEditable(false);
     	this.getRawDataDisplay().setBackground(null);
     	this.getRawDataDisplay().setAutoscrolls(true);
-    	ArrayList<Tweet> tweets= db.searchTweets(this.getAnalysisList().getItemAt(0).toString());
+    	ArrayList<Tweet> tweets = db.searchTweets(this.getAnalysisList().getItemAt(index).toString());
     	for (Tweet tweet:tweets){
     		this.getRawDataDisplay().append("//----------------------------------\\ \n");
     		this.getRawDataDisplay().append("TweetID: " + tweet.getID() + "\n");

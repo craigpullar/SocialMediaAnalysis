@@ -50,6 +50,21 @@ public class Application {
 				}
 			}
 		});
+        frame.getAnalysisList().addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int index = frame.getAnalysisList().getSelectedIndex();
+				try {
+					frame.fillRawData(db,index);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+        	
+        });
 		
 		scraper.setTweets(db.selectAllTweets());//Load tweets into memory
 		for (int i = 0; i < scraper.getTweets().size();i++){//Print tweets
