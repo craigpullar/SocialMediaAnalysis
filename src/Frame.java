@@ -5,9 +5,8 @@
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
@@ -39,8 +38,9 @@ public class Frame extends JFrame //FRAME
     private JTabbedPane resultsPanel;
     
     
-    //Declare Raw data components
+    //Declare result data components
     private JTextArea rawDataDisplay;
+    private JTextArea sentimentDataDisplay;
     
     public Frame(Database db) throws SQLException
 		{
@@ -127,6 +127,7 @@ public class Frame extends JFrame //FRAME
             
             //Create raw data components
             this.setRawDataDisplay(new JTextArea());
+            this.setSentimentDataDisplay(new JTextArea());
             
             //results panel
             this.setResultsPanel(new JTabbedPane());
@@ -141,14 +142,18 @@ public class Frame extends JFrame //FRAME
             this.getAnalsisPanel().add(this.getAnalysisList());
             
             //Create list of analysis
+            ArrayList<Analysis> analysisObjectList = db.selectAllAnalysis();
             this.fillAnalysisList(db);
-            this.fillRawData(db,0);
+            if(analysisObjectList.size() > 0) {
+	            this.fillRawData(db,0);
+	            this.fillSentimentData(db, 0);
+            }
             
 
             
             //Adds JPanels to results panel
             this.getResultsPanel().add("Map",Tab31);
-            this.getResultsPanel().add("Sentiment",Tab32);
+            this.getResultsPanel().add("Sentiment",new JScrollPane(this.getSentimentDataDisplay()));
             this.getResultsPanel().add("Pie Chart",Tab33);
             this.getResultsPanel().add("Raw Data",new JScrollPane(this.getRawDataDisplay()));
             this.getResultsPanel().add("Tag Cloud",Tab35);
@@ -178,7 +183,30 @@ public class Frame extends JFrame //FRAME
     	this.Tab3.add(this.getAnalysisList());
     	
     }
-    
+    public void fillSentimentData(Database db, int index) throws SQLException {
+    	this.getSentimentDataDisplay().setText(null);
+    	this.getSentimentDataDisplay().setEditable(false);
+    	this.getSentimentDataDisplay().setBackground(null);
+    	this.getSentimentDataDisplay().setAutoscrolls(true);
+    	ArrayList<Analysis> analysisObjectList = db.selectAllAnalysis();
+    	ArrayList<Sentiment> sentiments = db.selectSentiments(analysisObjectList.get(index).getID());
+    	double positive = 0;
+    	double negative = 0;
+    	for (Sentiment sentiment: sentiments) {
+    		if (sentiment.getSentiment() == 0) positive++;
+    		else negative++;
+    	}
+    	if (positive == 0 || negative == 0){
+    		this.getSentimentDataDisplay().append("Not enough analysis");
+    	}
+    	else {
+    		DecimalFormat df = new DecimalFormat("#.00");
+	    	double positivePercent = (positive/(positive + negative))*100;
+	    	double negativePercent =(negative/(positive + negative))*100;
+	    	this.getSentimentDataDisplay().append("Positive Percentage: " + df.format(positivePercent) + "% \n");
+	    	this.getSentimentDataDisplay().append("Negative Percentage: " + df.format(negativePercent) + "% \n");
+    	}
+    }
     public void fillRawData(Database db,int index) throws SQLException {
     	this.getRawDataDisplay().setText(null);
     	this.getRawDataDisplay().setEditable(false);
@@ -268,6 +296,14 @@ public class Frame extends JFrame //FRAME
 
 	public int getHeight() {
 		return HEIGHT;
+	}
+
+	public JTextArea getSentimentDataDisplay() {
+		return sentimentDataDisplay;
+	}
+
+	public void setSentimentDataDisplay(JTextArea sentimentDataDisplay) {
+		this.sentimentDataDisplay = sentimentDataDisplay;
 	}
 		
 }

@@ -12,9 +12,9 @@ public class Sentiment {
 	//--[[CONSTRUCTORS]]--\\
 	//--------------------\\
 	public Sentiment(long tweetID, int analysisID, int sentiment) {
-		this.tweetID = tweetID;
-		this.analysisID = analysisID;
-		this.sentiment = sentiment;
+		this.setTweetID(tweetID);
+		this.setAnalysisID(analysisID);
+		this.setSentiment(sentiment);
 	}
 	
 	//------------------------\\

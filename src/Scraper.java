@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -99,12 +100,37 @@ public class Scraper extends Thread{
 				}
 				
 				for (int i = 0; i < this.getTweets().size();i++){//Loop through tweets
-					if(!this.isRunning()) break;
-					Tweet tweet = this.getTweets().get(i);
+					if(!this.isRunning()) break;//If scraping cancelled break the loop
+					Tweet tweet = this.getTweets().get(i);//Get Tweet
+					Analyser analyser = new Analyser(analysis);//Create Analyser Object
+					
+					//Analyse Tweet
+					try {
+						if (analyser.sentimentAnalysis(tweet)) {
+							try {
+								analyser.sentimentAnalysis(tweet);
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							//Save Sentiment
+							try {
+								if(!this.db.sentimentExists(analyser.getSentiment()))
+										this.db.saveSentiment(analyser.getSentiment());
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					//Save Tweet if it does not already exist
 					try {
 						if(!this.db.tweetExists(tweet)){//if tweet does not exist in DB
 							this.db.saveTweet(tweet,this.analysis);//Save tweet to DB
-							tweet.printTweet();//Print tweet to console
 						}
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
@@ -120,7 +146,6 @@ public class Scraper extends Thread{
 					try {
 						if (!this.db.userExists(user)) {//If user does not exist in DB
 							this.db.saveUser(user);//Save user to DB
-							System.out.println("USER SAVED!");
 						}
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block

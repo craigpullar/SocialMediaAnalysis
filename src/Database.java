@@ -95,6 +95,21 @@ public class Database {
 	//------------------------\\
 	//--[[SELECT FUNCTIONS]]--\\
 	//------------------------\\
+	public ArrayList<Sentiment> selectSentiments(int analysisID) throws SQLException {
+		ArrayList<Sentiment> sentiments = new ArrayList<Sentiment>();
+		String SQL = "SELECT * FROM Twitter_Tweet_Sentiment_Analysis"
+				+ " WHERE AnalysisID = " + analysisID;
+		this.executeSQL(SQL);//execute SQL
+		ResultSet result = this.statement.getResultSet();//Get results
+		while (result.next()) {//Loop through results
+			int TweetID = result.getInt("TweetID");
+			int analysisID1 = result.getInt("AnalysisID");
+			int sentimentValue = result.getInt("Sentiment");
+			Sentiment sentiment = new Sentiment(TweetID,analysisID1,sentimentValue);
+			sentiments.add(sentiment);
+		}
+		return sentiments;
+	}
 	public ArrayList<Tweet> selectAllTweets() throws SQLException{//Load all tweets function
 		ArrayList<Tweet> tweets = new ArrayList<Tweet>();//Create list of tweets
 		String SQL = "SELECT * FROM Twitter_Tweet";//Define SQL statement
@@ -156,6 +171,17 @@ public class Database {
 		}
 		return false;
 	}
+	
+	public boolean sentimentExists(Sentiment sentiment) throws SQLException {
+		String SQL = "SELECT * FROM Twitter_Tweet_Sentiment_Analysis"
+				+ " WHERE TweetID = " + sentiment.getTweetID();
+		this.executeSQL(SQL);//Execute SQL
+		ResultSet result = this.statement.getResultSet();//Get result
+		if(result.next()){//If there is a result
+			return true;
+		}
+		return false;
+	}
 	//-----------------------------\\
 	//--[[SAVE OBJECT FUNCTIONS]]--\\
 	//-----------------------------\\
@@ -199,8 +225,8 @@ public class Database {
 		String SQL = "INSERT INTO Twitter_Tweet_Sentiment_Analysis " +
 						"VALUES(" +
 						sentiment.getTweetID() + "," +
-						sentiment.getAnalysisID() + "," +
-						sentiment.getSentiment() +
+						sentiment.getSentiment() + "," +
+						sentiment.getAnalysisID() +
 						");";
 		this.executeSQL(SQL);
 	}
@@ -215,6 +241,7 @@ public class Database {
 		this.twitterPersona();
 		this.twitterHashTag();
 		this.Analysis();
+		this.twitterSentiment();
 	
 	}
 	//--[[Twitter Tables]]--\\
@@ -270,10 +297,10 @@ public class Database {
 	//--[[Twitter Analysis Tables]]--\\
 	public void twitterSentiment() throws SQLException{
 		String SQL = "CREATE TABLE Twitter_Tweet_Sentiment_Analysis(" +
-				"TweetID INT NOT NULL FOREIGN KEY," +
-				"Sentiment INT NOT NULL," +
-				"AnalysisID INT NOT NULL FOREIGN KEY," +
-				"FOREIGN KEY TweetID references Twitter_Tweer(ID)," +
+				"TweetID INTEGER NOT NULL," +
+				"Sentiment INTEGER NOT NULL," +
+				"AnalysisID INTEGER NOT NULL," +
+				"FOREIGN KEY (TweetID) references Twitter_Tweer(ID)," +
 				"FOREIGN KEY (AnalysisID) references Analysis(ID)," +
 				"PRIMARY KEY (TweetID)" +
 				");";

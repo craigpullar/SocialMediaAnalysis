@@ -61,16 +61,16 @@ public class Application {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				try {
+					frame.fillSentimentData(db, index);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 			}
         	
         });
-		
-		scraper.setTweets(db.selectAllTweets());//Load tweets into memory
-		for (int i = 0; i < scraper.getTweets().size();i++){//Print tweets
-			Tweet tweet = scraper.getTweets().get(i);
-			tweet.printTweet();
-		}
 		
 	}
 }

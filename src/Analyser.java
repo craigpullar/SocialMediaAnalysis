@@ -26,21 +26,20 @@ public class Analyser {
 	//-----------------\\
 	//--[[FUNCTIONS]]--\\
 	//-----------------\\
-	public ArrayList<Sentiment> sentimentAnalysis(ArrayList<Tweet> tweets) throws IOException {
+	public boolean sentimentAnalysis(Tweet tweet) throws IOException {
 		File[] files = {new File("rsrc/positives.txt"), new File("rsrc/negatives.txt")};
 		for (int i = 0; i < files.length; i++){
 			this.fileReader = new BufferedReader(new FileReader(files[i]));
 			this.adjective = this.fileReader.readLine();
 			while(this.adjective != null) {
-				for(Tweet tweet:tweets){
 					if(tweet.getContent().contains(this.adjective)) {
-						Sentiment sentiment = new Sentiment(tweet.getID(),this.analysis.getID(),i);
+						this.setSentiment(new Sentiment(tweet.getID(),this.analysis.getID(),i));
+						return true;
 					}
-				}
 				this.adjective = this.fileReader.readLine();
 			}
 		}
-		return this.sentiments;
+		return false;
 	}
 	
 	public ArrayList<Location> locationAnalysis(ArrayList<Tweet> tweets) {
