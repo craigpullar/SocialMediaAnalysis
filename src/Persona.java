@@ -12,7 +12,7 @@ public class Persona extends User{
 	//-------------------\\
 	public Persona(int ID, int noTweets, int noFollowing, int noFollowers,
 			String location, Date DOB, Date joinDate,int analysisID) {
-		super(ID, noTweets, noFollowing, noFollowers, location, joinDate);
+		super(ID, noTweets, noFollowing, noFollowers, location, joinDate,analysisID);
 		this.analysisID = analysisID;
 	}
 

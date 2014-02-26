@@ -41,6 +41,7 @@ public class Frame extends JFrame //FRAME
     //Declare result data components
     private JTextArea rawDataDisplay;
     private JTextArea sentimentDataDisplay;
+    private JTextArea personaDisplay;
     
     public Frame(Database db) throws SQLException
 		{
@@ -125,9 +126,10 @@ public class Frame extends JFrame //FRAME
             Tab2.add(test1);
             //Tab2.add(secondTab);
             
-            //Create raw data components
+            //Create results data components
             this.setRawDataDisplay(new JTextArea());
             this.setSentimentDataDisplay(new JTextArea());
+            this.setPersonaDisplay(new JTextArea());
             
             //results panel
             this.setResultsPanel(new JTabbedPane());
@@ -151,10 +153,10 @@ public class Frame extends JFrame //FRAME
             
 
             
-            //Adds JPanels to results panel
+            //Adds JPanels to results panel with scroll panes
             this.getResultsPanel().add("Map",Tab31);
             this.getResultsPanel().add("Sentiment",new JScrollPane(this.getSentimentDataDisplay()));
-            this.getResultsPanel().add("Pie Chart",Tab33);
+            this.getResultsPanel().add("Personas",new JScrollPane(this.getPersonaDisplay()));
             this.getResultsPanel().add("Raw Data",new JScrollPane(this.getRawDataDisplay()));
             this.getResultsPanel().add("Tag Cloud",Tab35);
             
@@ -189,7 +191,7 @@ public class Frame extends JFrame //FRAME
     	this.getSentimentDataDisplay().setBackground(null);
     	this.getSentimentDataDisplay().setAutoscrolls(true);
     	ArrayList<Analysis> analysisObjectList = db.selectAllAnalysis();
-    	ArrayList<Sentiment> sentiments = db.selectSentiments(analysisObjectList.get(index).getID());
+    	ArrayList<Sentiment> sentiments = db.selectSentiments(analysisObjectList.get(index));
     	double positive = 0;
     	double negative = 0;
     	for (Sentiment sentiment: sentiments) {
@@ -221,6 +223,9 @@ public class Frame extends JFrame //FRAME
     		this.getRawDataDisplay().append("Date: " + tweet.getDate().toString() + "\n");
     		this.getRawDataDisplay().append("Location: " + tweet.getLocation().toString() + "\n");
     	}
+    }
+    public void fillPersonaData(Database db,int index) {
+    	
     }
 	
 	//------------------------\\
@@ -304,6 +309,14 @@ public class Frame extends JFrame //FRAME
 
 	public void setSentimentDataDisplay(JTextArea sentimentDataDisplay) {
 		this.sentimentDataDisplay = sentimentDataDisplay;
+	}
+
+	public JTextArea getPersonaDisplay() {
+		return personaDisplay;
+	}
+
+	public void setPersonaDisplay(JTextArea personaDisplay) {
+		this.personaDisplay = personaDisplay;
 	}
 		
 }

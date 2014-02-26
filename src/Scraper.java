@@ -76,7 +76,7 @@ public class Scraper extends Thread{
 		    String userLocation = scrapedUser.getLocation();
 		    Date joinDate = scrapedUser.getCreatedAt();
 
-		    this.user = new User(userID,noTweets,following,followers,userLocation,joinDate);//Create user as defined by us
+		    this.user = new User(userID,noTweets,following,followers,userLocation,joinDate,analysis.getID());//Create user as defined by us
 		    this.users.add(this.user);//add user to list of users
 
 	        this.tweet = new Tweet(ID,userID,content,date,location);//Create a tweet as defined by us

@@ -95,10 +95,10 @@ public class Database {
 	//------------------------\\
 	//--[[SELECT FUNCTIONS]]--\\
 	//------------------------\\
-	public ArrayList<Sentiment> selectSentiments(int analysisID) throws SQLException {
+	public ArrayList<Sentiment> selectSentiments(Analysis analysis) throws SQLException {
 		ArrayList<Sentiment> sentiments = new ArrayList<Sentiment>();
 		String SQL = "SELECT * FROM Twitter_Tweet_Sentiment_Analysis"
-				+ " WHERE AnalysisID = " + analysisID;
+				+ " WHERE AnalysisID = " + analysis.getID();
 		this.executeSQL(SQL);//execute SQL
 		ResultSet result = this.statement.getResultSet();//Get results
 		while (result.next()) {//Loop through results
@@ -141,7 +141,8 @@ public class Database {
 			int noFollowers = result.getInt("NoFollowers");
 			String location = result.getString("Location");
 			Date joinDate = result.getDate("JoinDate");
-			User user = new User(ID,noTweets,noFollowing,noFollowers,location,joinDate);
+			int analysisID = result.getInt("AnalysisID");
+			User user = new User(ID,noTweets,noFollowing,noFollowers,location,joinDate,analysisID);
 			users.add(user);
 		}
 		return users;
@@ -207,7 +208,8 @@ public class Database {
 						user.getNoFollowing() + "," +
 						user.getNoFollowers() + "," +
 						"'" + user.getLocation().replace("'", "!") + "'," +
-						"'" + user.getJoinDate() + "'" +
+						"'" + user.getJoinDate() + "'," +
+						user.getAnalysisID() +
 						");";
 		this.executeSQL(SQL);
 	}
@@ -269,6 +271,8 @@ public class Database {
 				"NoFollowers INT NOT NULL," +
 				"Location INT," +
 				"JoinDate date NOT NULL," +
+				"AnalysisID INT NOT NULL," +
+				"FOREIGN KEY(AnalysisID) References Analysis(ID)" +
 				"PRIMARY KEY (ID)" +
 				");";
 		this.executeSQL(SQL);

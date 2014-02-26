@@ -12,19 +12,29 @@ public class User {
 	private int noFollowers;
 	private String location;
 	private Date joinDate;
+	private int analysisID;
 	
 	//--------------------\\
 	//--[[CONSTRUCTORS]]--\\
 	//--------------------\\
-	public User(long ID, int noTweets, int noFollowing, int noFollowers, String location, Date joinDate ){
+	public User(long ID, int noTweets, int noFollowing, int noFollowers, String location, Date joinDate,int analysisID ){
 		this.setID(ID);
 		this.setNoTweets(noTweets);
 		this.setNoFollowing(noFollowing);
 		this.setNoFollowers(noFollowers);
 		this.setLocation(location);
 		this.setJoinDate(joinDate);
+		this.setAnalysisID(analysisID);
 	}
 	
+	public int getAnalysisID() {
+		return analysisID;
+	}
+
+	public void setAnalysisID(int analysisID) {
+		this.analysisID = analysisID;
+	}
+
 	//-------------------------\\
 	//--[[GETTERS & SETTERS]]--\\
 	//-------------------------\\
