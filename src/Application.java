@@ -67,6 +67,12 @@ public class Application {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+				try {
+					frame.fillPersonaData(db, index);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 			}
         	

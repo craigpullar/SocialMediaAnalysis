@@ -27,6 +27,11 @@ public class User {
 		this.setAnalysisID(analysisID);
 	}
 	
+
+
+	//-------------------------\\
+	//--[[GETTERS & SETTERS]]--\\
+	//-------------------------\\
 	public int getAnalysisID() {
 		return analysisID;
 	}
@@ -34,10 +39,6 @@ public class User {
 	public void setAnalysisID(int analysisID) {
 		this.analysisID = analysisID;
 	}
-
-	//-------------------------\\
-	//--[[GETTERS & SETTERS]]--\\
-	//-------------------------\\
 	public long getID() {
 		return ID;
 	}

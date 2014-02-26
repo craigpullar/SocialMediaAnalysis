@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -149,6 +150,7 @@ public class Frame extends JFrame //FRAME
             if(analysisObjectList.size() > 0) {
 	            this.fillRawData(db,0);
 	            this.fillSentimentData(db, 0);
+	            this.fillPersonaData(db, 0);
             }
             
 
@@ -224,8 +226,69 @@ public class Frame extends JFrame //FRAME
     		this.getRawDataDisplay().append("Location: " + tweet.getLocation().toString() + "\n");
     	}
     }
-    public void fillPersonaData(Database db,int index) {
-    	
+    public void fillPersonaData(Database db,int index) throws SQLException {
+    	ArrayList<Analysis> analysisObjectList = db.selectAllAnalysis();
+    	ArrayList<User> users = new ArrayList<User>();
+    	Persona persona = new Persona();
+		if(db.selectPersona(( analysisObjectList).get(index)) != null) {
+    		persona =	db.selectPersona(analysisObjectList.get(index));
+		}
+		else {
+			users = db.selectUsers(analysisObjectList.get(index));
+			int tweetCount = 0;
+			int noFollowing = 0;
+			int noFollowers = 0;
+			ArrayList<Integer> locationCount = new ArrayList<Integer>();
+			ArrayList<String> locations = new ArrayList<String>();
+			int largestCount = 0;
+			
+			long totalSeconds = 0;
+			for (User user:users) {
+				tweetCount += user.getNoTweets();
+				noFollowing += user.getNoFollowing();
+				noFollowers += user.getNoFollowers();
+				totalSeconds += user.getJoinDate().getTime() / 1000L;
+				if(!locations.contains(user.getLocation())) {
+					locations.add(user.getLocation());
+					locationCount.add(0);
+				}
+				else {
+					int locationIndex = locations.indexOf(user.getLocation());
+					int currentCount = locationCount.get(locationIndex);
+					locationCount.set(locationIndex, currentCount++);
+				}
+			}
+			int avgTweetCount = tweetCount/users.size();
+			int avgNoFollowing = noFollowing/users.size();
+			int avgNoFollowers = noFollowers/users.size();
+			long avgSeconds = totalSeconds/users.size();
+			Date averageDate = new Date(avgSeconds * 1000L);
+			int bestLocationIndex = 0;
+			for(int i = 0; i < locationCount.size(); i++){
+				if (locationCount.get(i) > largestCount) {
+					largestCount = locationCount.get(i);
+					bestLocationIndex = i;
+				}
+			}
+			String avgLocation = locations.get(bestLocationIndex);
+			int ID = (int) (Math.random() * 99999999);
+			persona = new Persona(ID,avgTweetCount,avgNoFollowing,avgNoFollowers,
+					avgLocation,averageDate,analysisObjectList.get(index).getID());
+			db.savePersona(persona);
+			
+		}
+    	this.getPersonaDisplay().setText(null);
+    	this.getPersonaDisplay().setEditable(false);
+    	this.getPersonaDisplay().setBackground(null);
+    	this.getPersonaDisplay().setAutoscrolls(true);
+    	this.getPersonaDisplay().append("The following persona is the average user tweeting about the search term"+"\n");
+    	this.getPersonaDisplay().append("//-------------------------\\ \n");
+    	this.getPersonaDisplay().append("PersonaID: " + persona.getID()+"\n");
+    	this.getPersonaDisplay().append("Tweet Count: " + persona.getNoTweets()+"\n");
+    	this.getPersonaDisplay().append("Number they are following: " + persona.getNoFollowing()+"\n");
+    	this.getPersonaDisplay().append("Number of followers: " + persona.getNoFollowers()+"\n");
+    	this.getPersonaDisplay().append("Location: " + persona.getLocation()+"\n");
+    	this.getPersonaDisplay().append("Join Date: " + persona.getJoinDate()+"\n");
     }
 	
 	//------------------------\\

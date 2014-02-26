@@ -148,6 +148,43 @@ public class Database {
 		return users;
 	}
 	
+	public ArrayList<User> selectUsers(Analysis analysis) throws SQLException {
+		ArrayList<User> users = new ArrayList<User>();//Create list of users
+		String SQL = "SELECT * FROM Twitter_User WHERE AnalysisID = " + analysis.getID();//Define SQL
+		this.executeSQL(SQL);//Execute SQL
+		ResultSet result = this.statement.getResultSet();//Get results
+		while (result.next()){
+			int ID = result.getInt("ID");
+			int noTweets = result.getInt("NoTweets");
+			int noFollowing = result.getInt("NoFollowing");
+			int noFollowers = result.getInt("NoFollowers");
+			String location = result.getString("Location");
+			Date joinDate = result.getDate("JoinDate");
+			int analysisID = result.getInt("AnalysisID");
+			User user = new User(ID,noTweets,noFollowing,noFollowers,location,joinDate,analysisID);
+			users.add(user);
+		}
+		return users;
+	}
+	
+	public Persona selectPersona(Analysis analysis) throws SQLException {
+		String SQL = "SELECT * FROM Twitter_Persona WHERE AnalysisID = " + analysis.getID();//Define SQL
+		this.executeSQL(SQL);//Execute SQL
+		ResultSet result = this.statement.getResultSet();//Get results
+		while (result.next()){
+			int ID = result.getInt("ID");
+			int noTweets = result.getInt("NoTweets");
+			int noFollowing = result.getInt("NoFollowing");
+			int noFollowers = result.getInt("NoFollowers");
+			String location = result.getString("Location");
+			Date joinDate = result.getDate("JoinDate");
+			int analysisID = result.getInt("AnalysisID");
+			Persona persona = new Persona(ID,noTweets,noFollowing,noFollowers,location,joinDate, analysisID);
+			return persona;
+		}
+		return null;
+	}
+	
 	//-----------------------\\
 	//--[[EXIST FUNCTIONS]]--\\
 	//-----------------------\\
@@ -230,6 +267,20 @@ public class Database {
 						sentiment.getSentiment() + "," +
 						sentiment.getAnalysisID() +
 						");";
+		this.executeSQL(SQL);
+	}
+	
+	public void savePersona(Persona persona) throws SQLException {
+		String SQL = "INSERT INTO Twitter_Persona " +
+				"VALUES(" +
+				persona.getID() + "," +
+				persona.getNoTweets() + "," +
+				persona.getNoFollowing() + "," +
+				persona.getNoFollowers() + "," +
+				"'" + persona.getLocation().replace("'", "!") + "'," +
+				"'" + persona.getJoinDate() + "'," +
+				persona.getAnalysisID() +
+				");";
 		this.executeSQL(SQL);
 	}
 	
@@ -318,7 +369,6 @@ public class Database {
 				"NoFollowing INT NOT NULL," +
 				"NoFollowers INT NOT NULL," +
 				"Location INT NOT NULL," +
-				"DOB date NOT NULL," +
 				"JoinDate date NOT NULL," +
 				"AnalysisID INT NOT NULL," +
 				"FOREIGN KEY (AnalysisID) references Analysis(ID),"+
